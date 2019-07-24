@@ -82,6 +82,7 @@
 	desc = "A pair of unique gloves that manipulate a local blue-space fold in order to temporarily shift the wearers hands and any held objects out of the normal plane, into a localized pocket of blue-space, to allow for implantation of objects or removal of them, in order to speed along surgery."
 	icon_state = "latex"
 	icon_state = "lgloves"
+	item_color = "mime"
 	transfer_prints = FALSE
 	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
 	resistance_flags = NONE
