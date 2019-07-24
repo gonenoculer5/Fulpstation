@@ -77,7 +77,7 @@
 	var/input = stripped_input(user,"What do you want your battlecry to be? Max length of 6 characters.", ,"", 7)
 	if(input)
 		warcry = input
-/obj/item/clothing/gloves/color/latex/nitrile/blueshift
+/obj/item/clothing/gloves/color/latex/blueshift
 	name = "Blueshift Gloves"
 	desc = "A pair of unique gloves that manipulate a local blue-space fold in order to temporarily shift the wearers hands and any held objects out of the normal plane, into a localized pocket of blue-space, to allow for implantation of objects or removal of them, in order to speed along surgery."
 	icon_state = "latex"
