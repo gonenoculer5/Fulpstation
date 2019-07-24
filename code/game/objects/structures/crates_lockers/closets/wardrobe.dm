@@ -11,10 +11,7 @@
 		new /obj/item/clothing/under/skirt/color/blue(src)
 	for(var/i in 1 to 3)
 		new /obj/item/clothing/shoes/sneakers/brown(src)
-	for(var/i in 1 to 3)
-		new /obj/item/restraints/handcuffs/toycuffs
-	return
-
+		
 /obj/structure/closet/wardrobe/pink
 	name = "pink wardrobe"
 	icon_door = "pink"
