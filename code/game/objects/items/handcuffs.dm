@@ -394,3 +394,5 @@
 	. = ..()
 	if(effectReference)
 		QDEL_NULL(effectReference)
+
+//toycuffs
