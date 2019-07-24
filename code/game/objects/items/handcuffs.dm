@@ -395,4 +395,21 @@
 	if(effectReference)
 		QDEL_NULL(effectReference)
 
-//toycuffs
+/obj/item/restraints/handcuffs/toycuffs //Toy cuffs for the clown
+	name = "Toy Handcuffs"
+	desc = "The clowns personal handcuffs."
+	gender = PLURAL
+	icon = 'icons/obj/items_and_weapons.dmi'
+	icon_state = "handcuff"
+	lefthand_file = 'icons/mob/inhands/equipment/security_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/equipment/security_righthand.dmi'
+	flags_1 = CONDUCT_1
+	slot_flags = ITEM_SLOT_BELT
+	throwforce = 0
+	w_class = WEIGHT_CLASS_SMALL
+	throw_speed = 3
+	throw_range = 5
+	materials = list(/datum/material/iron=500)
+	breakouttime = 15 SECONDS
+	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	
