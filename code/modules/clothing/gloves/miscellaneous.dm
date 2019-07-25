@@ -128,6 +128,6 @@
 	user.gib()
 	return
 	
-/obj/item/clothing/gloves/color/latex/blueshift/attack(mob/living/M, mob/user)
+/*/obj/item/clothing/gloves/color/latex/blueshift/attack(mob/living/M, mob/user)
 	if(!attempt_initiate_surgery(src, M, user))
-		..()
+		..()*/
