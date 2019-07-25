@@ -90,16 +90,18 @@
 	siemens_coefficient = 0.05
 	permeability_coefficient = 0.01
 	var/phase = 0
-/obj/item/clothing/gloves/color/latex/blueshift/phase1 //Blueshift gloves (phasing mechanic) [XEON]
-
+/obj/item/clothing/gloves/color/latex/blueshift/screwdriver_act(mob/living/user, obj/item/I) //Blueshift gloves (phasing mechanic) [XEON]
 
 	switch(phase)
 		if(0)
 			to_chat(user, "<span class='notice'>The gloves materialize, becomming solid.</span>")
+			phase = 1
 		if(1)
 			to_chat(user, "<span class='notice'>The gloves become translucent, partially phasing.</span>")
+			phase = 2
 		if(2)
 			to_chat(user, "<span class='notice'>The gloves become nearly invisible, completely phasing.</span>")	
+			phase = 0
 
 /obj/item/clothing/gloves/color/latex/blueshift/verb/swap()
 	set category = "Object"
