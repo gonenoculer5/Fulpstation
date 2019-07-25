@@ -3,6 +3,9 @@
 	steps = list(/datum/surgery_step/phasein, /datum/surgery_step/handle_cavity, /datum/surgery_step/phaseout)
 	target_mobtypes = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 	possible_locs = list(BODY_ZONE_CHEST)
+	ignore_clothes = TRUE
+	can_cancel = FALSE
+	self_operable = TRUE
 
 
 //handle cavity
@@ -11,7 +14,7 @@
 	accept_hand = 1
 	implements = list(/obj/item = 100)
 	repeatable = TRUE
-	time = 32
+	time = 20
 	var/obj/item/IC = null
 
 /datum/surgery_step/handle_cavity/tool_check(mob/user, obj/item/tool)

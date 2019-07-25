@@ -126,9 +126,9 @@
 
 //blue-shift steps [XEON]
 /datum/surgery_step/phasein //Phase into chest
-name = "BS Phase In"
-implements = list(/obj/item/clothing/gloves/color/latex/blueshift = 100)
-time = 15
+	name = "BS Phase In"
+	implements = list(/obj/item/clothing/gloves/color/latex/blueshift = 100)
+	time = 15
 
 
 
@@ -144,9 +144,9 @@ time = 15
 	
 
 /datum/surgery_step/phaseout //Phase out of chest
-name = "BS Phase Out"
-implements = list(/obj/item/clothing/gloves/color/latex/blueshift = 100)
-time = 15
+	name = "BS Phase Out"
+	implements = list(/obj/item/clothing/gloves/color/latex/blueshift = 100)
+	time = 15
 
 /datum/surgery_step/phaseout/preop(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	display_results(user, target, "<span class='notice'>You begin to phase out of [target]'s [parse_zone(target_zone)]...</span>",
