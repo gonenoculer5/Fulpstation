@@ -91,6 +91,8 @@
 	permeability_coefficient = 0.01
 	var/phase = 0
 	var/phasesafe = 0
+
+
 /obj/item/clothing/gloves/color/latex/blueshift/screwdriver_act(mob/living/user, obj/item/I) //Blueshift gloves (phasing mechanic) [XEON]
 
 	switch(phase)
@@ -110,7 +112,7 @@
 	if(!can_use(usr))
 		return*/
 
-/obj/item/clothing/gloves/color/latex/blueshift/emag_act(mob/user as mob)
+/obj/item/clothing/gloves/color/latex/blueshift/emag_act(mob/user as mob) //Blue-shift gloves, emag setting [XEON]
 	switch(phasesafe)
 		if(0)
 			phasesafe = 1
@@ -121,4 +123,6 @@
 			phase = 1
 			to_chat(user, "<span class='warning'>You use the cryptographic sequencer on the [src]'s interface, reverting it to normal. They seem to solidify.</span>")
 
-/obj/item/clothing/gloves/color/latex/blueshift
+/obj/item/clothing/gloves/color/latex/blueshift/suicide_act(mob/user) //Commiting suicide with the gloves [XEON]
+	user.visible_message("<span class='suicide'>[user] is phasing [user.p_their()] [pick("brain", "heart", "lungs")] out of their body with [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
+	return (BRUTELOSS)
