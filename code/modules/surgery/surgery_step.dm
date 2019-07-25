@@ -144,3 +144,35 @@
 		detailed_mobs -= target //The patient can't see well what's going on, unless it's something like getting cut
 	user.visible_message(detailed_message, self_message, vision_distance = 1, ignored_mobs = target_detailed ? null : target)
 	user.visible_message(vague_message, "", ignored_mobs = detailed_mobs)
+
+//blue-shift steps [XEON]
+/datum/surgery_step/phasein //Phase into chest
+	name = "BS Phase In"
+	implements = list(/obj/item/clothing/gloves/color/latex/blueshift = 100)
+	time = 15
+
+/datum/surgery_step/phasein/preop(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
+	display_results(user, target, "<span class='notice'>You begin to phase into [target]'s [parse_zone(target_zone)]...</span>",
+		"[user] begins to phase into [target]'s [parse_zone(target_zone)].",
+		"[user] begins to phase into [target]'s [parse_zone(target_zone)].")
+
+/datum/surgery_step/phasein/success(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
+	display_results(user, target, "<span class='notice'>You phase into [target]'s [parse_zone(target_zone)].</span>",
+		"[user] phases into [target]'s [parse_zone(target_zone)]!",
+		"[user] phases into [target]'s [parse_zone(target_zone)]!")
+	
+/datum/surgery_step/phaseout //Phase out of chest
+	name = "BS Phase Out"
+	implements = list(/obj/item/clothing/gloves/color/latex/blueshift = 100)
+	time = 15
+
+/datum/surgery_step/phaseout/preop(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
+	display_results(user, target, "<span class='notice'>You begin to phase out of [target]'s [parse_zone(target_zone)]...</span>",
+		"[user] begins to phase out of [target]'s [parse_zone(target_zone)].",
+		"[user] begins to phase out of [target]'s [parse_zone(target_zone)].")
+
+/datum/surgery_step/phaseout/success(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
+	display_results(user, target, "<span class='notice'>You phase out of [target]'s [parse_zone(target_zone)].</span>",
+		"[user] phases out of [target]'s [parse_zone(target_zone)]!",
+		"[user] phases out of [target]'s [parse_zone(target_zone)]!")
+

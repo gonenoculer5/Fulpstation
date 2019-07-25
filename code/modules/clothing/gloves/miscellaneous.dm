@@ -127,3 +127,7 @@
 	user.visible_message("<span class='suicide'>[user] is phasing [user.p_their()] [pick("soul", "spirit", "ghost")] out of their body with the [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
 	user.gib()
 	return
+	
+/obj/item/clothing/gloves/color/latex/blueshift/attack(mob/living/M, mob/user)
+	if(!attempt_initiate_surgery(src, M, user))
+		..()
