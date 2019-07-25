@@ -90,6 +90,7 @@
 	siemens_coefficient = 0.05
 	permeability_coefficient = 0.01
 	var/phase = 0
+	var/phasesafe = 0
 /obj/item/clothing/gloves/color/latex/blueshift/screwdriver_act(mob/living/user, obj/item/I) //Blueshift gloves (phasing mechanic) [XEON]
 
 	switch(phase)
@@ -98,11 +99,26 @@
 			phase = 1
 		if(1)
 			to_chat(user, "<span class='notice'>The gloves become translucent, partially phasing.</span>")
-			phase = 2
-		if(2)
-			to_chat(user, "<span class='notice'>The gloves become nearly invisible, completely phasing.</span>")	
 			phase = 0
-
-/obj/item/clothing/gloves/color/latex/blueshift/verb/swap()
+			
+/*/obj/item/clothing/gloves/color/latex/blueshift/verb/swap(mob/living/user, obj/item/I)
 	set category = "Object"
 	set name = "Change mode"
+	set src in usr
+	if(!isliving(usr))
+		return
+	if(!can_use(usr))
+		return*/
+
+/obj/item/clothing/gloves/color/latex/blueshift/emag_act(mob/user as mob)
+	switch(phasesafe)
+		if(0)
+			phasesafe = 1
+			phase = 3
+			to_chat(user, "<span class='warning'>You use the cryptographic sequencer on the [src]'s interface, causing it to flicker strangely.</span>")
+		if(1)
+			phasesafe = 0
+			phase = 1
+			to_chat(user, "<span class='warning'>You use the cryptographic sequencer on the [src]'s interface, reverting it to normal. They seem to solidify.</span>")
+
+/obj/item/clothing/gloves/color/latex/blueshift
