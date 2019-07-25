@@ -77,14 +77,30 @@
 	var/input = stripped_input(user,"What do you want your battlecry to be? Max length of 6 characters.", ,"", 7)
 	if(input)
 		warcry = input
-/obj/item/clothing/gloves/color/latex/blueshift
+
+/obj/item/clothing/gloves/color/latex/blueshift //Blueshift gloves (item) [XEON]
 	name = "Blueshift Gloves"
 	desc = "A pair of unique gloves that manipulate a local blue-space fold in order to temporarily shift the wearers hands and any held objects out of the normal plane, into a localized pocket of blue-space, to allow for implantation of objects or removal of them, in order to speed along surgery."
 	icon_state = "latex"
 	item_state = "lgloves"
 	item_color = "mime"
 	transfer_prints = FALSE
-	//armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
+	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
 	resistance_flags = NONE
 	siemens_coefficient = 0.05
 	permeability_coefficient = 0.01
+	var/phase = 0
+/obj/item/clothing/gloves/color/latex/blueshift/phase1 //Blueshift gloves (phasing mechanic) [XEON]
+
+
+	switch(phase)
+		if(0)
+			to_chat(user, "<span class='notice'>The gloves materialize, becomming solid.</span>")
+		if(1)
+			to_chat(user, "<span class='notice'>The gloves become translucent, partially phasing.</span>")
+		if(2)
+			to_chat(user, "<span class='notice'>The gloves become nearly invisible, completely phasing.</span>")	
+
+/obj/item/clothing/gloves/color/latex/blueshift/verb/swap()
+	set category = "Object"
+	set name = "Change mode"
