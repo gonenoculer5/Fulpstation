@@ -124,5 +124,6 @@
 			to_chat(user, "<span class='warning'>You use the cryptographic sequencer on the [src]'s interface, reverting it to normal. They seem to solidify.</span>")
 
 /obj/item/clothing/gloves/color/latex/blueshift/suicide_act(mob/user) //Commiting suicide with the gloves [XEON]
-	user.visible_message("<span class='suicide'>[user] is phasing [user.p_their()] [pick("brain", "heart", "lungs")] out of their body with [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
-	return (BRUTELOSS)
+	user.visible_message("<span class='suicide'>[user] is phasing [user.p_their()] [pick("soul", "spirit", "ghost")] out of their body with the [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
+	user.gib()
+	return
