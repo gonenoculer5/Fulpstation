@@ -113,18 +113,18 @@
 	new /obj/item/multitool(src)
 	new /obj/item/stack/cable_coil(src, MAXCOIL, "yellow")
 
-/obj/item/storage/belt/medical_emt
+/obj/item/storage/belt/medical_emt //[FULP] [XEON]
 	name = "emt belt"
-	desc = "Can hold various emergency equipment"
+	desc = "Can hold various emergency medical equipment"
 	icon_state = "medicalbelt"
 	item_state = "medical"
 
-/obj/item/storage/belt/medical_emt/ComponentInitialize()
+/obj/item/storage/belt/medical_emt/ComponentInitialize() //[FULP] [XEON]
 	. = ..()
 	var/datum/component/storage/STR = GetComponent(/datum/component/storage)
 	STR.max_w_class = WEIGHT_CLASS_BULKY
 	STR.set_holdable(list(
-				/obj/item/healthanalyzer,
+		/obj/item/healthanalyzer,
 		/obj/item/dnainjector,
 		/obj/item/reagent_containers/dropper,
 		/obj/item/reagent_containers/glass/beaker,
