@@ -44,7 +44,7 @@
 
 	//EMT "hard"suit helm [FULP] [XEON]
 /obj/item/clothing/head/helmet/space/hardsuit/medical/emt
-	name = "emergency medical hardsuit helmet"
+	name = "Emergency Medical Hardsuit Helmet"
 	desc = "A special suit designed for work in a hazardous, low pressure enviroment. It appears to offer some protection from bio-hazards and good protection against heat, but is very weak to any kind of attack."
 	icon_state = "hardsuit0-medical"
 	item_state = "medical_helm"
@@ -55,7 +55,7 @@
 
 	//EMT "hard"suit [FULP] [XEON]
 /obj/item/clothing/suit/space/hardsuit/medical/emt
-	name = "emergency medical hardsuit helmet"
+	name = "Emergency Medical Hardsuit Helmet"
 	desc = "A special suit designed for work in a hazardous, low pressure enviroment. It appears to offer some protection from bio-hazards and good protection against heat, but is very weak to any kind of attack."
 	icon_state = "hardsuit-medical"
 	item_state = "medical_hardsuit"
@@ -65,7 +65,7 @@
 	slowdown = 0.2
 
 /obj/item/clothing/under/rank/medical/emt //EMT suit and skirt
-	name = "emergency medical technician's jumpsuit"
+	name = "Emergency Medical Technician's Jumpsuit"
 	desc = "It's made of a special fiber that provides minor protection against biohazards. It has a stripe denoting that the wearer is an emergency medical technician."
 	icon_state = "medical"
 	item_state = "w_suit"
@@ -76,7 +76,7 @@
 	can_adjust = FALSE
 
 /obj/item/clothing/under/rank/medical/emt/skirt
-	name = "emergency medical technician's jumpskirt"
+	name = "Emergency Medical Technician's Jumpskirt"
 	desc = "It's made of a special fiber that provides minor protection against biohazards. It has a stripe denoting that the wearer is an emergency medical technician."
 	icon_state = "medical_skirt"
 	item_state = "w_suit"
@@ -84,7 +84,7 @@
 	fitted = FEMALE_UNIFORM_TOP
 
 /obj/item/storage/belt/medical_emt //[FULP] [XEON] EMT belt
-	name = "emt belt"
+	name = "EMT belt"
 	desc = "Can hold various emergency medical equipment"
 	icon_state = "medicalbelt"
 	item_state = "medical"
