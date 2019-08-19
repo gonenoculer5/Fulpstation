@@ -447,28 +447,6 @@
 	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/medical
 	slowdown = 0.5
 
-	//EMT "hard"suit helm [FULP] [XEON]
-/obj/item/clothing/head/helmet/space/hardsuit/medical/emt
-	name = "emergency medical hardsuit helmet"
-	desc = "A special suit designed for work in a hazardous, low pressure enviroment. It appears to offer some protection from bio-hazards and good protection against heat, but is very weak to any kind of attack."
-	icon_state = "hardsuit0-medical"
-	item_state = "medical_helm"
-	item_color = "medical"
-	flash_protect = 0
-	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 80, "rad" = 0, "fire" = 95, "acid" = 0)
-	clothing_flags = STOPSPRESSUREDAMAGE | THICKMATERIAL | SCAN_REAGENTS
-
-	//EMT "hard"suit [FULP] [XEON]
-/obj/item/clothing/suit/space/hardsuit/medical/emt
-	name = "emergency medical hardsuit helmet"
-	desc = "A special suit designed for work in a hazardous, low pressure enviroment. It appears to offer some protection from bio-hazards and good protection against heat, but is very weak to any kind of attack."
-	icon_state = "hardsuit-medical"
-	item_state = "medical_hardsuit"
-	allowed = list(/obj/item/flashlight, /obj/item/tank/internals, /obj/item/storage/firstaid, /obj/item/healthanalyzer, /obj/item/stack/medical)
-	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 80, "rad" = 0, "fire" = 95, "acid" = 0)
-	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/medical/emt
-	slowdown = 0.2
-
 	//Research Director hardsuit
 /obj/item/clothing/head/helmet/space/hardsuit/rd
 	name = "prototype hardsuit helmet"
