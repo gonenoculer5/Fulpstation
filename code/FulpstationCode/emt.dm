@@ -22,13 +22,15 @@
 	name = "Emergency Medical Technician"
 	jobtype = /datum/job/emt
 
+	head = /obj/item/clothing/head/soft/emt
 	belt = /obj/item/storage/belt/medical_emt 
 	ears = /obj/item/radio/headset/headset_med
 	uniform = /obj/item/clothing/under/rank/medical/emt
 	shoes = /obj/item/clothing/shoes/sneakers/white
-	suit =  /obj/item/clothing/suit/toggle/labcoat
+	suit =  /obj/item/clothing/suit/toggle/labcoat/emt
 	l_hand = /obj/item/storage/firstaid/brute
 	suit_store = /obj/item/flashlight/pen
+	l_pocket = /obj/item/pda/medical
 
 	backpack = /obj/item/storage/backpack/medic
 	satchel = /obj/item/storage/backpack/satchel/med
@@ -37,7 +39,7 @@
 	chameleon_extras = /obj/item/gun/syringe
 
 
-//////EMT ITEMS/OUTFITS/ETC//////
+//////EMT ITEMs/ETC//////
 
 
 	//EMT "hard"suit helm [FULP] [XEON]
