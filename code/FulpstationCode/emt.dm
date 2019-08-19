@@ -1,5 +1,5 @@
 /datum/job/emt //[FULP] [XEON] EMT job
-	title = "Emergency Medical Technician"
+	title = "EMT"
 	flag = EMT
 	department_head = list("Chief Medical Officer")
 	department_flag = MEDSCI
@@ -19,7 +19,7 @@
 	display_order = JOB_DISPLAY_ORDER_EMT
 
 /datum/outfit/job/emt //EMT outfit
-	name = "Emergency Medical Technician"
+	name = "EMT"
 	jobtype = /datum/job/emt
 
 	head = /obj/item/clothing/head/soft/emt
