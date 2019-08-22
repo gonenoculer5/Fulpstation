@@ -55,7 +55,7 @@
 
 /obj/item/bsg/proc/update_power()
 	if(!QDELETED(cell))
-		if(QDELETED(gauntlets) || cell.charge < gauntlets.operate)
+		if(QDELETED(gauntlets) || cell.charge < 1)
 			powered = FALSE
 		else
 			powered = TRUE
@@ -68,6 +68,10 @@
 			var/ratio = cell.charge / cell.maxcharge
 			ratio = CEILING(ratio*4, 1) * 25
 			add_overlay("[initial(icon_state)]-charge[ratio]")
+
+/obj/item/bsg/proc/make_gauntlets()
+	return new /obj/item/twohanded/bsg(src)
+
 
 /obj/item/twohanded/bsg
 	name = "Blue-Shift Gauntlets"
@@ -83,4 +87,3 @@
 	w_class = WEIGHT_CLASS_BULKY
 	resistance_flags = INDESTRUCTIBLE
 
-	
