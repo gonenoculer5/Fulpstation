@@ -124,34 +124,3 @@
 		"[user] drills into [target]'s [parse_zone(target_zone)]!")
 	return 1
 
-/*//blue-shift steps [XEON]
-/datum/surgery_step/phasein //Phase into chest
-	name = "BS Phase In"
-	implements = list(/obj/item/clothing/gloves/color/latex/blueshift = 100)
-	time = 15
-
-/datum/surgery_step/phasein/preop(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, "<span class='notice'>You begin to phase into [target]'s [parse_zone(target_zone)]...</span>",
-		"[user] begins to phase into [target]'s [parse_zone(target_zone)].",
-		"[user] begins to phase into [target]'s [parse_zone(target_zone)].")
-
-/datum/surgery_step/phasein/success(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, "<span class='notice'>You phase into [target]'s [parse_zone(target_zone)].</span>",
-		"[user] phases into [target]'s [parse_zone(target_zone)]!",
-		"[user] phases into [target]'s [parse_zone(target_zone)]!")
-	
-/datum/surgery_step/phaseout //Phase out of chest
-	name = "BS Phase Out"
-	implements = list(/obj/item/clothing/gloves/color/latex/blueshift = 100)
-	time = 15
-
-/datum/surgery_step/phaseout/preop(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, "<span class='notice'>You begin to phase out of [target]'s [parse_zone(target_zone)]...</span>",
-		"[user] begins to phase out of [target]'s [parse_zone(target_zone)].",
-		"[user] begins to phase out of [target]'s [parse_zone(target_zone)].")
-
-/datum/surgery_step/phaseout/success(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, "<span class='notice'>You phase out of [target]'s [parse_zone(target_zone)].</span>",
-		"[user] phases out of [target]'s [parse_zone(target_zone)]!",
-		"[user] phases out of [target]'s [parse_zone(target_zone)]!")
-*/
