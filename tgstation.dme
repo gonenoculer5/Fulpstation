@@ -553,6 +553,7 @@
 #include "code\datums\wires\syndicatebomb.dm"
 #include "code\datums\wires\tesla_coil.dm"
 #include "code\datums\wires\vending.dm"
+#include "code\FulpstationCode\bsg_new.dm"
 #include "code\FulpstationCode\bsg_old.dm"
 #include "code\FulpstationCode\fulp_ticker.dm"
 #include "code\FulpstationCode\fulp_world.dm"
