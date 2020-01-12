@@ -134,7 +134,7 @@
 	if(!ishuman(user))
 		return
 	if(slot == ITEM_SLOT_HEAD)
-		user.grant_language(/datum/language/piratespeak/)
+		user.grant_language(/datum/language/piratespeak/, TRUE, TRUE, LANGUAGE_HAT)
 		to_chat(user, "<span class='boldnotice'>You suddenly know how to speak like a pirate!</span>")
 
 /obj/item/clothing/head/pirate/dropped(mob/user)
@@ -143,7 +143,7 @@
 		return
 	var/mob/living/carbon/human/H = user
 	if(H.get_item_by_slot(ITEM_SLOT_HEAD) == src)
-		user.remove_language(/datum/language/piratespeak/)
+		user.remove_language(/datum/language/piratespeak/, TRUE, TRUE, LANGUAGE_HAT)
 		to_chat(user, "<span class='boldnotice'>You can no longer speak like a pirate.</span>")
 
 /obj/item/clothing/head/pirate/captain
@@ -291,6 +291,9 @@
 	icon_state = "jester_hat"
 	dynamic_hair_suffix = ""
 
+/obj/item/clothing/head/jester/alt
+	icon_state = "jester2"
+
 /obj/item/clothing/head/rice_hat
 	name = "rice hat"
 	desc = "Welcome to the rice fields, motherfucker."
@@ -349,12 +352,6 @@
 	desc = "Walk like an Egyptian."
 	icon_state = "pharoah_hat"
 	item_state = "pharoah_hat"
-
-/obj/item/clothing/head/jester/alt
-	name = "jester hat"
-	desc = "A hat with bells, to add some merriness to the suit."
-	icon_state = "jester_hat"
-	dynamic_hair_suffix = ""
 
 /obj/item/clothing/head/nemes
 	name = "headdress of Nemes"
