@@ -66,14 +66,16 @@
 	else if(A == bottle)
 		bottle = null
 
-/obj/machinery/chem_master/update_icon()
-	cut_overlays()
-	if (stat & BROKEN)
-		add_overlay("waitlight")
+/obj/machinery/chem_master/update_icon_state()
 	if(beaker)
 		icon_state = "mixer1"
 	else
 		icon_state = "mixer0"
+
+/obj/machinery/chem_master/update_overlays()
+	. = ..()
+	if(machine_stat & BROKEN)
+		. += "waitlight"
 
 /obj/machinery/chem_master/blob_act(obj/structure/blob/B)
 	if (prob(50))
@@ -114,20 +116,19 @@
 		return ..()
 
 /obj/machinery/chem_master/AltClick(mob/living/user)
-	if(!istype(user) || !user.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
+	. = ..()
+	if(!can_interact(user) || !user.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
 		return
 	replace_beaker(user)
-	return
 
 /obj/machinery/chem_master/proc/replace_beaker(mob/living/user, obj/item/reagent_containers/new_beaker)
+	if(!user)
+		return FALSE
 	if(beaker)
-		beaker.forceMove(drop_location())
-		if(user && Adjacent(user) && !issiliconoradminghost(user))
-			user.put_in_hands(beaker)
+		user.put_in_hands(beaker)
+		beaker = null
 	if(new_beaker)
 		beaker = new_beaker
-	else
-		beaker = null
 	update_icon()
 	return TRUE
 
@@ -245,7 +246,7 @@
 			amount = text2num(input(usr,
 				"Max 10. Buffer content will be split evenly.",
 				"How many to make?", 1))
-		amount = CLAMP(round(amount), 0, 10)
+		amount = clamp(round(amount), 0, 10)
 		if (amount <= 0)
 			return FALSE
 		// Get units per item
@@ -271,7 +272,7 @@
 				"Maximum [vol_each_max] units per item.",
 				"How many units to fill?",
 				vol_each_max))
-		vol_each = CLAMP(vol_each, 0, vol_each_max)
+		vol_each = clamp(vol_each, 0, vol_each_max)
 		if(vol_each <= 0)
 			return FALSE
 		// Get item name
@@ -334,7 +335,7 @@
 				var/firstReagent = reagents.get_master_reagent_id()	//FULP
 				if(text2num(many))	//FULP
 					amount_full = round((reagents.get_reagent_amount(reagents.get_master_reagent_id())) / 10)	//FULP
-					amount = CLAMP(round(input(usr, "Medipens only contain 10u", "How many medipens?", amount) as num|null), 0, 10)	//FULP
+					amount = clamp(round(input(usr, "Medipens only contain 10u", "How many medipens?", amount) as num|null), 0, 10)	//FULP
 					if(amount > amount_full)	//FULP
 						to_chat(usr, "<span class='notice'>You have selected an amount larger than the possible maximum of [amount_full], creating [amount_full] instead...")	//FULP
 						amount = amount_full	//FULP

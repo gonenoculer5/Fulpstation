@@ -158,7 +158,7 @@
 	var/searJuices = H.getFireLoss_nonProsthetic() / 10
 
 	// Step 2) Bleed out those juices by warmth, minus burn damage.
-	H.bleed_rate = CLAMP((H.bodytemperature - 285) / 20 - searJuices, 0, 5) // Every 20 points above 285 increases bleed rate. Don't worry, you're cold blooded.
+	H.bleed_rate = clamp((H.bodytemperature - 285) / 20 - searJuices, 0, 5) // Every 20 points above 285 increases bleed rate. Don't worry, you're cold blooded.
 
 	// Step 3) If we're salted, we'll bleed more (it gets reset next tick)
 	if (dehydrate > 0)
@@ -497,10 +497,10 @@
 /obj/item/bodypart/proc/drop_meat(mob/inOwner)
 
 	//Checks tile for cloning pod, if found then limb stays limb. Stops cloner from breaking beefmen making them useless after being cloned.
-	var/turf/T = get_turf(src)
-	for(var/obj/machinery/M in T)
-		if(istype(M,/obj/machinery/clonepod))
-			return FALSE
+	//var/turf/T = get_turf(src)
+	//for(var/obj/machinery/M in T)
+	//	if(istype(M,/obj/machinery/clonepod))
+	//		return FALSE
 
 	// Not Organic? ABORT! Robotic stays robotic, desnt delete and turn to meat.
 	if (status != BODYPART_ORGANIC)

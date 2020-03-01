@@ -47,7 +47,7 @@
 	setDir(ini_dir)
 	move_update_air(T)
 
-/obj/structure/windoor_assembly/update_icon()
+/obj/structure/windoor_assembly/update_icon_state()
 	icon_state = "[facing]_[secure ? "secure_" : ""]windoor_assembly[state]"
 
 /obj/structure/windoor_assembly/CanAllowThrough(atom/movable/mover, turf/target)
@@ -218,6 +218,11 @@
 				else
 					W.forceMove(drop_location())
 
+			//Electroadaptive Psuedocircuit can now install electronics - FULP ELECTROADAPTIVE PROCS FOR AIRLOCKS UPDATE PR, Surrealistik Feb 2020
+			else if(istype(W, /obj/item/electroadaptive_pseudocircuit) && !electronics ) //FULP ELECTROADAPTIVE PROCS FOR AIRLOCKS UPDATE PR, Surrealistik Feb 2020
+				windoor_install_electroadaptive(W, user) //FULP ELECTROADAPTIVE PROCS FOR AIRLOCKS UPDATE PR, Surrealistik Feb 2020
+
+
 			//Screwdriver to remove airlock electronics. Step 6 undone.
 			else if(W.tool_behaviour == TOOL_SCREWDRIVER)
 				if(!electronics)
@@ -315,13 +320,8 @@
 
 /obj/structure/windoor_assembly/ComponentInitialize()
 	. = ..()
-	AddComponent(
-		/datum/component/simple_rotation,
-		ROTATION_ALTCLICK | ROTATION_CLOCKWISE | ROTATION_COUNTERCLOCKWISE | ROTATION_VERBS,
-		null,
-		CALLBACK(src, .proc/can_be_rotated),
-		CALLBACK(src,.proc/after_rotation)
-		)
+	var/static/rotation_flags = ROTATION_ALTCLICK | ROTATION_CLOCKWISE | ROTATION_COUNTERCLOCKWISE | ROTATION_VERBS
+	AddComponent(/datum/component/simple_rotation, rotation_flags, can_be_rotated=CALLBACK(src, .proc/can_be_rotated), after_rotation=CALLBACK(src,.proc/after_rotation))
 
 /obj/structure/windoor_assembly/proc/can_be_rotated(mob/user,rotation_type)
 	if(anchored)

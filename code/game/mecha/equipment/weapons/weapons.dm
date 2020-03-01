@@ -34,6 +34,9 @@
 	if (targloc == curloc)
 		return 0
 
+	if (!handle_pins()) //FULP Mech Weapon Firing Pins PR by Surrealistik Oct 2019
+		return FALSE
+
 	set_ready_state(0)
 	for(var/i=1 to get_shot_amount())
 		var/obj/projectile/A = new projectile(curloc)
@@ -487,7 +490,7 @@
 
 /obj/item/punching_glove/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
 	if(!..())
-		if(ismovableatom(hit_atom))
+		if(ismovable(hit_atom))
 			var/atom/movable/AM = hit_atom
 			AM.safe_throw_at(get_edge_target_turf(AM,get_dir(src, AM)), 7, 2)
 		qdel(src)
