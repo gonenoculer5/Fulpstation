@@ -25,6 +25,15 @@
 	illegal_tech = TRUE
 	restricted_roles = list("Bartender")
 
+/datum/uplink_item/role_restricted/syndicate_cigars
+	name = "Suspicious Cigar Case"
+	desc = "A dark black cigar case with a familiar crimson S embroidered inside the lid. Filled with five specialty cuban cigars infused with Omnizine. Enough space under the tray to hold a Sketchkin."
+	item = /obj/item/storage/fancy/cigarettes/cigars/syndicate
+	cost = 5
+	cant_discount = FALSE
+	illegal_tech = FALSE
+	restricted_roles = list("Bartender")
+
 /datum/uplink_item/role_restricted/mech_firing_pin
 	name = "Concealed Weapon Bay (Mech Firing Pin Included)"
 	desc = "A handy firing pin that can only be installed into mech weapons. \
