@@ -775,6 +775,7 @@
 #include "code\datums\wires\syndicatebomb.dm"
 #include "code\datums\wires\tesla_coil.dm"
 #include "code\datums\wires\vending.dm"
+#include "code\FulpstationCode\antag_augments.dm"
 #include "code\FulpstationCode\balloons.dm"
 #include "code\FulpstationCode\bowler_hat.dm"
 #include "code\FulpstationCode\dbz.dm"

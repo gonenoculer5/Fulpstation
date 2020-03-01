@@ -24,3 +24,13 @@
 	cant_discount = FALSE
 	illegal_tech = TRUE
 	restricted_roles = list("Bartender")
+	//XEON
+/datum/uplink_item/role_restricted/berz_chip
+	name = "Berzerker Chipset"
+	desc = "An autosurgeon containing a illegal blackmarket chip that upon activation, fills the body with adrenaline and a healing stimulant, also reinforcing the nervous system, severely reducing stuns while active. Side-effects may include drowsyness, muscle soreness, and extreme episodes of fatigue after use."
+	item = /obj/item/autosurgeon/berz_chip //Placeholder
+	cost = 8
+	cant_discount = FALSE
+	restricted_roles = list("Medical Doctor", "Roboticist")
+	limited_stock = 1
+	//XEON
