@@ -27,7 +27,7 @@
 						   OFFSET_S_STORE = list(0,2), OFFSET_FACEMASK = list(0,3), OFFSET_HEAD = list(0,3), OFFSET_FACE = list(0,3), OFFSET_BELT = list(0,3), OFFSET_BACK = list(0,2), \
 						   OFFSET_SUIT = list(0,2), OFFSET_NECK = list(0,3))
 
-	skinned_type = /obj/item/reagent_containers/food/snacks/faggot // NO SKIN //  /obj/item/stack/sheet/animalhide/human
+	skinned_type = /obj/item/reagent_containers/food/snacks/meatball // NO SKIN //  /obj/item/stack/sheet/animalhide/human
 	meat = /obj/item/reagent_containers/food/snacks/meat/slab //What the species drops on gibbing
 	toxic_food = DAIRY | PINEAPPLE //NONE
 	disliked_food = VEGETABLES | FRUIT // | FRIED// GROSS | RAW
@@ -91,7 +91,7 @@
 
 	// Be Spooked but Educated
 	//C.gain_trauma(pick(startTraumas))
-	if (SStraumas.phobia_words && SStraumas.phobia_words.len) // NOTE: ONLY if phobias have been defined! For some reason, sometimes this gets FUCKED??
+	if (SStraumas.phobia_types && SStraumas.phobia_types.len) // NOTE: ONLY if phobias have been defined! For some reason, sometimes this gets FUCKED??
 		C.gain_trauma(/datum/brain_trauma/mild/phobia/strangers)
 		C.gain_trauma(/datum/brain_trauma/mild/hallucinations)
 		C.gain_trauma(/datum/brain_trauma/special/bluespace_prophet/phobetor)
@@ -186,7 +186,7 @@
 		if("Security Officer", "Warden", "Detective", "Head of Security", "Deputy")
 			newSash = new /obj/item/clothing/under/bodysash/security()
 		// Medical
-		if("Medical Doctor", "Chemist", "Geneticist", "Virologist", "Chief Medical Officer")
+		if("Medical Doctor", "Chemist", "Geneticist", "Virologist", "Chief Medical Officer", "Paramedic")
 			newSash = new /obj/item/clothing/under/bodysash/medical()
 		// Science
 		if("Scientist", "Roboticist", "Research Director")
@@ -209,9 +209,11 @@
 		// Civilian
 		else
 			newSash = new /obj/item/clothing/under/bodysash/civilian()
-
-	H.equip_to_slot_or_del(newSash, ITEM_SLOT_OCLOTHING) // equip_to_slot_or_del
-
+	// Destroy Original Uniform (there probably isn't one though)
+	if (H.w_uniform)
+		qdel(H.w_uniform)
+	// Equip New
+	H.equip_to_slot_or_del(newSash, ITEM_SLOT_ICLOTHING, TRUE) // TRUE is whether or not this is "INITIAL", as in startup
 	return ..()
 
 /datum/species/beefman/after_equip_job(datum/job/J, mob/living/carbon/human/H)
@@ -224,7 +226,6 @@
 	// Remove coat! We don't wear that as a Beefboi
 	if (H.wear_suit)
 		qdel(H.wear_suit)
-
 
 
 /datum/species/beefman/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
@@ -674,13 +675,13 @@
 	name = "body sash"
 	desc = "A simple body sash, slung from shoulder to hip."
 	icon = 'icons/Fulpicons/fulpclothing.dmi' // item icon
-	mob_overlay_icon =  'icons/Fulpicons/fulpclothing_worn.dmi' // mob worn icon
+	worn_icon =  'icons/Fulpicons/fulpclothing_worn.dmi' // mob worn icon
 	icon_state = "assistant" // Inventory Icon
 	//item_color = "assistant" // The worn item Icon
 	body_parts_covered = CHEST // |GROIN|ARMS
 	lefthand_file = 'icons/Fulpicons/fulpclothing_hold_left.dmi'
 	righthand_file = 'icons/Fulpicons/fulpclothing_hold_right.dmi'
-	item_state = "sash" // In-hand Icon
+	inhand_icon_state = "sash" // In-hand Icon
 
 /obj/item/clothing/under/bodysash/security
 	name = "security sash"
@@ -739,12 +740,15 @@
 
 /datum/brain_trauma/special/bluespace_prophet/phobetor/on_life()
 
+	var/turf/first_turf
+	var/turf/second_turf
+
 	// Make Next Portal
 	if(world.time > next_portal)
-		next_portal = world.time + 100
 
+/*
 		// Round One: Pick a Nearby Turf
-		var/list/turf/possible_turfs = return_valid_floor_in_range(owner, 6, 0, TRUE) // Source, Range, Has Floor
+		var/list/turf/possible_turfs = return_valid_floors_in_range(owner, 6, 0, TRUE) // Source, Range, Has Floor
 		if(!LAZYLEN(possible_turfs))
 			return
 		// First Pick:
@@ -753,7 +757,7 @@
 			return
 
 		// Round Two: Pick an even Further Turf
-		possible_turfs = return_valid_floor_in_range(first_turf, 20, 6, TRUE) // Source, Range, Has Floor
+		possible_turfs = return_valid_floors_in_range(first_turf, 20, 6, TRUE) // Source, Range, Has Floor
 		possible_turfs -= first_turf
 		if(!LAZYLEN(possible_turfs))
 			return
@@ -761,6 +765,22 @@
 		var/turf/second_turf = pick(possible_turfs)
 		if(!second_turf)
 			return
+*/
+
+		// Round One: Pick a Nearby Turf
+		first_turf = return_valid_floor_in_range(owner, 6, 0, TRUE)
+		if (!first_turf)
+			next_portal = world.time + 10
+			return
+
+		// Round Two: Pick an even Further Turf
+		second_turf = return_valid_floor_in_range(first_turf, 20, 6, TRUE)
+		if (!second_turf)
+			next_portal = world.time + 10
+			return
+
+		next_portal = world.time + 100
+
 
 		var/obj/effect/hallucination/simple/phobetor/first = new (first_turf, owner)
 		var/obj/effect/hallucination/simple/phobetor/second = new (second_turf, owner)

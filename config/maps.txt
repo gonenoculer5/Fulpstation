@@ -13,8 +13,13 @@ Format:
 	votable (is this map votable)
 endmap
 
+map heliostation
+	minplayers 25
+	#voteweight 1.5
+	votable
+endmap
+
 map boxstation
-	default
 	#voteweight 1.5
 	votable
 endmap
@@ -28,6 +33,7 @@ endmap
 map kilostation
 	minplayers 25
 	votable
+	disabled
 endmap
 
 map pubbystation
@@ -39,8 +45,8 @@ map deltastation
 	votable
 endmap
 
-map donutstation
-	minplayers 50
+map icebox
+	minplayers 25
 	votable
 endmap
 

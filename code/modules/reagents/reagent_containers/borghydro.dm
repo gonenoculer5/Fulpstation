@@ -13,7 +13,7 @@ Borg Hypospray
 	name = "cyborg hypospray"
 	desc = "An advanced chemical synthesizer and injection system, designed for heavy-duty medical equipment."
 	icon = 'icons/obj/syringe.dmi'
-	item_state = "hypo"
+	inhand_icon_state = "hypo"
 	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
 	icon_state = "borghypo"
@@ -186,7 +186,11 @@ Borg Hypospray
 	icon_state = "borghypo_s"
 	charge_cost = 20
 	recharge_time = 2
-	reagent_ids = list(/datum/reagent/medicine/syndicate_nanites, /datum/reagent/medicine/potass_iodide, /datum/reagent/medicine/morphine)
+	reagent_ids = list(/datum/reagent/medicine/syndicate_nanites,
+		/datum/reagent/medicine/potass_iodide,
+		/datum/reagent/toxin/lipolicide, //FULPSTATION SYNDICATE MEDBORG UPDATE by Surrealistik March 2020
+		/datum/reagent/toxin/anacea, //FULPSTATION SYNDICATE MEDBORG UPDATE by Surrealistik March 2020
+		/datum/reagent/toxin/heparin) //FULPSTATION SYNDICATE MEDBORG UPDATE by Surrealistik March 2020
 	bypass_protection = 1
 	accepts_reagent_upgrades = FALSE
 
