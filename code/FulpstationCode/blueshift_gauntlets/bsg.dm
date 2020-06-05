@@ -34,7 +34,7 @@ var/currentSurgery = 1
 
 /datum/martial_art/bluespace_shifting/on_remove(mob/living/carbon/human/H)
 	to_chat(H, "<span class='userdanger'>You suddenly forget the art of [name]...</span>")
-	//setphase.Remove(H)
+	setphase.Remove(H)
 
 
 //BSG Item [XEON/FULP]
