@@ -1,14 +1,15 @@
 var/isPhased = FALSE
+var/isImplementSpawned = FALSE
 var/isDrapeSpawned = FALSE
 var/isCauterySpawned = FALSE
 var/bsgtrait = TRAIT_BLUESPACE_SHIFTING
 
 //Action Buttons
 var/datum/action/set_phase/setphase = new/datum/action/set_phase()
-var/datum/action/summon_implements/summonimplement = new/datum/action/summon_implements()
+var/datum/action/summon_implements/summon_implements = new/datum/action/summon_implements()
 
 /datum/action/set_phase //Create the button for toggling the gloves phase.
-	name = "Change Phase - Enable or disable the gloves phasing device."
+	name = "Change Phase - Enable or disable the gloves phasing device"
 	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
 	button_icon_state = "neckchop" //placeholder
 
@@ -26,12 +27,12 @@ var/datum/action/summon_implements/summonimplement = new/datum/action/summon_imp
 		owner.visible_message("[owner.name] deactivates their Blueshift Gauntlets with a soft beep.")
 		playsound(owner,'sound/machines/beep.ogg',1,TRUE)
 
-/datum/action/summon_implements
-	name = "Summon Implements - Summon a holographic cautery or set of drapes for starting operations."
+/datum/action/summon_implements //Create the button for summoning the holographic implements.
+	name = "Summon Implements - Summon a holographic cautery or set of drapes for starting operations"
 	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
 	button_icon_state = "neckchop" //placeholder
 
-/datum/action/summon_implements/Trigger()
+/datum/action/summon_implements/Trigger() //Summon the implements and create the radial menu for doing so.
 	if(owner.incapacitated())
 		to_chat(owner, "<span class='warning'>You can't use [name] while you're incapacitated!</span>")
 		return
@@ -40,8 +41,8 @@ var/datum/action/summon_implements/summonimplement = new/datum/action/summon_imp
 		owner.visible_message("[owner.name] tries to summon a tool while the gauntlets are off with a dull beep.")
 		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
 	else
-		to_chat(owner, "<span class ='notice'>You deactivate the gauntlets, removing them from the bluespace fold!</span>")
-		owner.visible_message("[owner.name] deactivates their Blueshift Gauntlets with a soft beep.")
+		if(isImplementSpawned == FALSE)
+			selectimplement(owner)
 
 //BSG Item [XEON/FULP]
 /obj/item/clothing/gloves/color/latex/nitrile/blueshift/equipped(mob/user, slot)
@@ -51,6 +52,7 @@ var/datum/action/summon_implements/summonimplement = new/datum/action/summon_imp
 	if(slot == ITEM_SLOT_GLOVES)
 		ADD_TRAIT(user, bsgtrait, CLOTHING_TRAIT)
 		setphase.Grant(user)
+		summon_implements.Grant(user)
 
 /obj/item/clothing/gloves/color/latex/nitrile/blueshift/dropped(mob/user)
 	. = ..()
@@ -64,6 +66,7 @@ var/datum/action/summon_implements/summonimplement = new/datum/action/summon_imp
 			playsound(user,'sound/machines/beep.ogg',1,TRUE)
 			REMOVE_TRAIT(user, bsgtrait, CLOTHING_TRAIT)
 			setphase.Remove(user)
+			summon_implements.Remove(user)
 
 /obj/item/clothing/gloves/color/latex/nitrile/blueshift
 	name = "Blueshift Gauntlets"
@@ -78,3 +81,25 @@ var/datum/action/summon_implements/summonimplement = new/datum/action/summon_imp
 	heat_protection = HANDS
 	max_heat_protection_temperature = GLOVES_MAX_TEMP_PROTECT
 	resistance_flags = NONE
+
+//TECHWEB HANDLING
+/datum/design/bs_gauntlet
+	name = "Blueshift Gauntlets"
+	desc = "A "
+	id = "bs_gauntlet"
+	build_type = PROTOLATHE
+	materials = list(/datum/material/iron = 500, /datum/material/glass = 250, /datum/material/gold = 250, /datum/material/diamond = 500, /datum/material/bluespace = 1000, /datum/material/plastic = 500)
+	build_path = /obj/item/clothing/gloves/color/latex/nitrile/blueshift
+	category = list("Medical Designs")
+	lathe_time_factor = 0.2
+	departmental_flags = DEPARTMENTAL_FLAG_MEDICAL | DEPARTMENTAL_FLAG_SCIENCE
+
+/datum/techweb_node/bluespace_folding
+	id = "bs_folding"
+	starting_node = FALSE
+	display_name = "Bluespace Folding"
+	description = "At what point must we ask, are we concerned with what we can do, or what we should do?"
+	design_ids = list("bs_gauntlet")
+	prereq_ids = list("bluespace_storage","exp_surgery","adv_biotech","exp_tools")
+	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 10000)
+	export_price = 5000
