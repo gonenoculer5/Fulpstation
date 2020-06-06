@@ -2,14 +2,19 @@
 //make incision
 /datum/surgery_step/incise
 	name = "make incision"
-	implements = list(TOOL_SCALPEL = 100, /obj/item/melee/transforming/energy/sword = 75, /obj/item/kitchen/knife = 65,
+	implements = list(/obj/item/clothing/gloves/color/latex/phantom_hand = 100, TOOL_SCALPEL = 100, /obj/item/melee/transforming/energy/sword = 75, /obj/item/kitchen/knife = 65,
 		/obj/item/shard = 45, /obj/item = 30) // 30% success with any sharp item.
 	time = 16
 
 /datum/surgery_step/incise/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, "<span class='notice'>You begin to make an incision in [target]'s [parse_zone(target_zone)]...</span>",
-		"<span class='notice'>[user] begins to make an incision in [target]'s [parse_zone(target_zone)].</span>",
-		"<span class='notice'>[user] begins to make an incision in [target]'s [parse_zone(target_zone)].</span>")
+	if(implement_type == /obj/item/clothing/gloves/color/latex/phantom_hand)
+		display_results(user, target, "<span class='notice'>You begin to phase into [target]'s [parse_zone(target_zone)]...</span>",
+			"<span class='notice'>[user] begins to phase into [target]'s [parse_zone(target_zone)].</span>",
+			"<span class='notice'>[user] begins to phase into [target]'s [parse_zone(target_zone)].</span>")
+	else
+		display_results(user, target, "<span class='notice'>You begin to make an incision in [target]'s [parse_zone(target_zone)]...</span>",
+			"<span class='notice'>[user] begins to make an incision in [target]'s [parse_zone(target_zone)].</span>",
+			"<span class='notice'>[user] begins to make an incision in [target]'s [parse_zone(target_zone)].</span>")
 
 /datum/surgery_step/incise/tool_check(mob/user, obj/item/tool)
 	if(implement_type == /obj/item && !tool.get_sharpness())
@@ -31,9 +36,14 @@
 	experience_given = 1 //safer so not as much XP
 
 /datum/surgery_step/incise/nobleed/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, "<span class='notice'>You begin to <i>carefully</i> make an incision in [target]'s [parse_zone(target_zone)]...</span>",
-		"<span class='notice'>[user] begins to <i>carefully</i> make an incision in [target]'s [parse_zone(target_zone)].</span>",
-		"<span class='notice'>[user] begins to <i>carefully</i> make an incision in [target]'s [parse_zone(target_zone)].</span>")
+	if(implement_type == /obj/item/clothing/gloves/color/latex/phantom_hand)
+		display_results(user, target, "<span class='notice'>You begin to <i>carefully</i> phase into [target]'s [parse_zone(target_zone)]...</span>",
+			"<span class='notice'>[user] begins to <i>carefully</i> phase into [target]'s [parse_zone(target_zone)].</span>",
+			"<span class='notice'>[user] begins to <i>carefully</i> phase into [target]'s [parse_zone(target_zone)].</span>")
+	else
+		display_results(user, target, "<span class='notice'>You begin to <i>carefully</i> make an incision in [target]'s [parse_zone(target_zone)]...</span>",
+			"<span class='notice'>[user] begins to <i>carefully</i> make an incision in [target]'s [parse_zone(target_zone)].</span>",
+			"<span class='notice'>[user] begins to <i>carefully</i> make an incision in [target]'s [parse_zone(target_zone)].</span>")
 
 /datum/surgery_step/incise/nobleed/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results)
 	user?.mind.adjust_experience(/datum/skill/medical, experience_given)
@@ -42,7 +52,7 @@
 //clamp bleeders
 /datum/surgery_step/clamp_bleeders
 	name = "clamp bleeders"
-	implements = list(TOOL_HEMOSTAT = 100, TOOL_WIRECUTTER = 60, /obj/item/stack/packageWrap = 35, /obj/item/stack/cable_coil = 15)
+	implements = list(/obj/item/clothing/gloves/color/latex/phantom_hand = 300, TOOL_HEMOSTAT = 100, TOOL_WIRECUTTER = 60, /obj/item/stack/packageWrap = 35, /obj/item/stack/cable_coil = 15)
 	time = 24
 
 /datum/surgery_step/clamp_bleeders/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -61,13 +71,18 @@
 //retract skin
 /datum/surgery_step/retract_skin
 	name = "retract skin"
-	implements = list(TOOL_RETRACTOR = 100, TOOL_SCREWDRIVER = 45, TOOL_WIRECUTTER = 35)
+	implements = list(/obj/item/clothing/gloves/color/latex/phantom_hand = 300, TOOL_RETRACTOR = 100, TOOL_SCREWDRIVER = 45, TOOL_WIRECUTTER = 35)
 	time = 24
 
 /datum/surgery_step/retract_skin/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, "<span class='notice'>You begin to retract the skin in [target]'s [parse_zone(target_zone)]...</span>",
-		"<span class='notice'>[user] begins to retract the skin in [target]'s [parse_zone(target_zone)].</span>",
-		"<span class='notice'>[user] begins to retract the skin in [target]'s [parse_zone(target_zone)].</span>")
+	if(implement_type == /obj/item/clothing/gloves/color/latex/phantom_hand)
+		display_results(user, target, "<span class='notice'>You begin to locate [target]'s [parse_zone(target_zone)]...</span>",
+			"<span class='notice'>[user] begins to locate [target]'s [parse_zone(target_zone)].</span>",
+			"<span class='notice'>[user] begins to locate [target]'s [parse_zone(target_zone)].</span>")
+	else
+		display_results(user, target, "<span class='notice'>You begin to retract the skin in [target]'s [parse_zone(target_zone)]...</span>",
+			"<span class='notice'>[user] begins to retract the skin in [target]'s [parse_zone(target_zone)].</span>",
+			"<span class='notice'>[user] begins to retract the skin in [target]'s [parse_zone(target_zone)].</span>")
 
 
 
@@ -102,14 +117,19 @@
 //saw bone
 /datum/surgery_step/saw
 	name = "saw bone"
-	implements = list(TOOL_SAW = 100,/obj/item/melee/arm_blade = 75,
+	implements = list(/obj/item/clothing/gloves/color/latex/phantom_hand = 300, TOOL_SAW = 100,/obj/item/melee/arm_blade = 75,
 	/obj/item/twohanded/fireaxe = 50, /obj/item/hatchet = 35, /obj/item/kitchen/knife/butcher = 25, /obj/item = 20) //20% success (sort of) with any sharp item with a force>=10
 	time = 54
 
 /datum/surgery_step/saw/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, "<span class='notice'>You begin to saw through the bone in [target]'s [parse_zone(target_zone)]...</span>",
-		"<span class='notice'>[user] begins to saw through the bone in [target]'s [parse_zone(target_zone)].</span>",
-		"<span class='notice'>[user] begins to saw through the bone in [target]'s [parse_zone(target_zone)].</span>")
+	if(implement_type == /obj/item/clothing/gloves/color/latex/phantom_hand)
+		display_results(user, target, "<span class='notice'>You begin to phase through the bone in [target]'s [parse_zone(target_zone)]...</span>",
+			"<span class='notice'>[user] begins to phase through the bone in [target]'s [parse_zone(target_zone)].</span>",
+			"<span class='notice'>[user] begins to phase through the bone in [target]'s [parse_zone(target_zone)].</span>")
+	else
+		display_results(user, target, "<span class='notice'>You begin to saw through the bone in [target]'s [parse_zone(target_zone)]...</span>",
+			"<span class='notice'>[user] begins to saw through the bone in [target]'s [parse_zone(target_zone)].</span>",
+			"<span class='notice'>[user] begins to saw through the bone in [target]'s [parse_zone(target_zone)].</span>")
 
 /datum/surgery_step/saw/tool_check(mob/user, obj/item/tool)
 	if(implement_type == /obj/item && !(tool.get_sharpness() && (tool.force >= 10)))
@@ -118,9 +138,14 @@
 
 /datum/surgery_step/saw/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results)
 	target.apply_damage(50, BRUTE, "[target_zone]")
-	display_results(user, target, "<span class='notice'>You saw [target]'s [parse_zone(target_zone)] open.</span>",
-		"<span class='notice'>[user] saws [target]'s [parse_zone(target_zone)] open!</span>",
-		"<span class='notice'>[user] saws [target]'s [parse_zone(target_zone)] open!</span>")
+	if(implement_type == /obj/item/clothing/gloves/color/latex/phantom_hand)
+		display_results(user, target, "<span class='notice'>You phase through [target]'s bones successfully.</span>",
+			"<span class='notice'>[user] phases through [target]'s bones successfully!</span>",
+			"<span class='notice'>[user] phases through [target]'s bones successfully!</span>")
+	else
+		display_results(user, target, "<span class='notice'>You saw [target]'s [parse_zone(target_zone)] open.</span>",
+			"<span class='notice'>[user] saws [target]'s [parse_zone(target_zone)] open!</span>",
+			"<span class='notice'>[user] saws [target]'s [parse_zone(target_zone)] open!</span>")
 	return ..()
 
 //drill bone

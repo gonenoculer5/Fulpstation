@@ -15,7 +15,7 @@
 //lobectomy, removes the most damaged lung lobe with a 95% base success chance
 /datum/surgery_step/lobectomy
 	name = "excise damaged lung node"
-	implements = list(TOOL_SCALPEL = 95, /obj/item/melee/transforming/energy/sword = 65, /obj/item/kitchen/knife = 45,
+	implements = list(TOOL_SCALPEL = 95, /obj/item/clothing/gloves/color/latex/phantom_hand = 85, /obj/item/melee/transforming/energy/sword = 65, /obj/item/kitchen/knife = 45,
 		/obj/item/shard = 35)
 	time = 42
 	experience_given = MEDICAL_SKILL_ORGAN_FIX

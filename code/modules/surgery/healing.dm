@@ -25,7 +25,7 @@
 
 /datum/surgery_step/heal
 	name = "repair body"
-	implements = list(TOOL_HEMOSTAT = 100, TOOL_SCREWDRIVER = 65, /obj/item/pen = 55)
+	implements = list(/obj/item/clothing/gloves/color/latex/phantom_hand = 100, TOOL_HEMOSTAT = 100, TOOL_SCREWDRIVER = 65, /obj/item/pen = 55)
 	repeatable = TRUE
 	time = 25
 	var/brutehealing = 0

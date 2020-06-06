@@ -811,6 +811,7 @@
 #include "code\FulpstationCode\t5_parts.dm"
 #include "code\FulpstationCode\wintercoats.dm"
 #include "code\FulpstationCode\blueshift_gauntlets\bsg.dm"
+#include "code\FulpstationCode\blueshift_gauntlets\bsg_surgery.dm"
 #include "code\FulpstationCode\body_camera_files\body_camera_procs.dm"
 #include "code\FulpstationCode\borg_radio_files\borg_radio.dm"
 #include "code\FulpstationCode\fulp_airlock_electroadaptive\fulp_airlock_electroadaptive_procs.dm"
