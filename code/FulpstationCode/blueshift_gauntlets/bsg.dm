@@ -39,7 +39,7 @@ var/datum/action/summon_implements/summon_implements = new/datum/action/summon_i
 	if(isPhased == FALSE)
 		owner.visible_message("[owner.name] tries to summon a tool while the gauntlets are off with a dull beep.","<span class ='warning'>You can't use [name] while the gauntlets arent phased!</span>","You hear a beep nearby.")
 		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
-	return
+		return
 	if(isImplementSpawned)
 		return
 	var/choice = input(user,"Implements:", "Choose Implement",null) as null|anything in list("Holographic Drapes", "Holographic Cautery")
