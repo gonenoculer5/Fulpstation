@@ -5,8 +5,8 @@ var/isCauterySpawned = FALSE
 var/bsgtrait = TRAIT_BLUESPACE_SHIFTING
 
 //Action Buttons
-var/datum/action/set_phase/setphase = new/datum/action/set_phase()
-var/datum/action/summon_implements/summon_implements = new/datum/action/summon_implements()
+var/datum/action/set_phase/setphase = new /datum/action/set_phase()
+var/datum/action/summon_implements/summon_implements = new /datum/action/summon_implements()
 
 /datum/action/set_phase //Create the button for toggling the gloves phase.
 	name = "Change Phase - Enable or disable the gloves phasing device"
@@ -33,22 +33,25 @@ var/datum/action/summon_implements/summon_implements = new/datum/action/summon_i
 	button_icon_state = "neckchop" //placeholder
 
 /datum/action/summon_implements/Trigger(mob/living/user) //Summon the implements and create the radial menu for doing so.
-	if(owner.incapacitated())
+	/*if(owner.incapacitated())
 		to_chat(owner, "<span class='warning'>You can't use [name] while you're incapacitated!</span>")
 		return
 	if(isPhased == FALSE)
 		owner.visible_message("[owner.name] tries to summon a tool while the gauntlets are off with a dull beep.","<span class ='warning'>You can't use [name] while the gauntlets arent phased!</span>","You hear a beep nearby.")
 		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
-		return
-	if(isImplementSpawned)
-		return
-	var/choice = input(user,"Implements:", "Choose Implement",null) as null|anything in list("Holographic Drapes", "Holographic Cautery")
-	if(!choice)
-		return
+		return*/
+	/*if(!isImplementSpawned)
+		return*/
+	var/choice = input("Implements:", "Choose Implement") as null|anything in list("Holographic Drapes", "Holographic Cautery")
+	message_admins("bruh1")
+	/*if(!choice)
+		return*/
 	switch(choice)
 		if("Holographic Drapes")
-			var/obj/item/surgical_drapes/holographic/HD = new /obj/item/surgical_drapes/holographic(get_turf(src))
-			user.put_in_active_hand(HD)
+			var/obj/item/surgical_drapes/holographic/HD = new /obj/item/surgical_drapes/holographic(get_turf(user))
+			message_admins("bruh2")
+			user.put_in_hand(HD)
+			message_admins("bruh3")
 			isImplementSpawned = TRUE
 			isDrapeSpawned = TRUE
 		if("Holographic Cautery")
