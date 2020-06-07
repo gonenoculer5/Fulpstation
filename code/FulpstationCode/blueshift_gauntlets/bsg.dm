@@ -32,7 +32,7 @@ var/datum/action/summon_implements/summon_implements = new/datum/action/summon_i
 	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
 	button_icon_state = "neckchop" //placeholder
 
-/datum/action/summon_implements/Trigger() //Summon the implements and create the radial menu for doing so.
+/datum/action/summon_implements/Trigger(mob/living/user) //Summon the implements and create the radial menu for doing so.
 	if(owner.incapacitated())
 		to_chat(owner, "<span class='warning'>You can't use [name] while you're incapacitated!</span>")
 		return
@@ -40,9 +40,21 @@ var/datum/action/summon_implements/summon_implements = new/datum/action/summon_i
 		to_chat(owner, "<span class ='warning'>You can't use [name] while the gauntlets arent phased!</span>")
 		owner.visible_message("[owner.name] tries to summon a tool while the gauntlets are off with a dull beep.")
 		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
-	else
-		if(isImplementSpawned == FALSE)
-			selectimplement(owner)
+	if(isImplementSpawned == FALSE)
+		var/choice = input(user,"Implements:", "Choose Implement",null) as null|anything in list("Holographic Drapes", "Holographic Cautery")
+	if(!choice)
+		return
+	switch(choice)
+	if("Holographic Drapes")
+		var/obj/item/sword/HD = new/obj/item/surgical_drapes/holographic(get_turf(src))
+		user.put_in_active_hand(HD)
+		isImplementSpawned = TRUE
+		isDrapeSpawned = TRUE
+	if("Holographic Cautery")
+	var/obj/item/gun/HC = new/obj/item/cautery/augment/holographic(get_turf(src))
+		user.put_in_active_hand(HC)
+		isImplementSpawned = TRUE
+		isCauterySpawned = TRUE
 
 //BSG Item [XEON/FULP]
 /obj/item/clothing/gloves/color/latex/nitrile/blueshift/equipped(mob/user, slot)

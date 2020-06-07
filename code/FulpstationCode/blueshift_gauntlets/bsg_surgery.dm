@@ -44,7 +44,7 @@
 
 
 
-proc/selectimplement(owner)
+/*proc/selectimplement(owner)
 	var/zone
 	var/obj/item/holder = null
 	var/choicea = /obj/item/surgical_drapes/holographic
@@ -74,3 +74,4 @@ proc/selectimplement(owner)
 			for(var/i in failure_message)
 				to_chat(owner, i)
 			return
+*/
