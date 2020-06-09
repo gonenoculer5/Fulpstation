@@ -3,6 +3,8 @@ var/isImplementSpawned = FALSE
 var/isDrapeSpawned = FALSE
 var/isCauterySpawned = FALSE
 var/bsgtrait = TRAIT_BLUESPACE_SHIFTING
+var/list/implements = list()
+var/max_implements = 2
 
 //Action Buttons
 var/datum/action/set_phase/setphase = new /datum/action/set_phase()
@@ -13,7 +15,8 @@ var/datum/action/summon_implements/summon_implements = new /datum/action/summon_
 	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
 	button_icon_state = "neckchop" //placeholder
 
-/datum/action/set_phase/Trigger() //Toggle the gloves phase between on or off.
+/datum/action/set_phase/Trigger(mob/user) //Toggle the gloves phase between on or off.
+	user = owner
 	if(owner.incapacitated())
 		to_chat(owner, "<span class='warning'>You can't use [name] while you're incapacitated!</span>")
 		return
@@ -21,42 +24,48 @@ var/datum/action/summon_implements/summon_implements = new /datum/action/summon_
 		to_chat(owner, "<span class ='notice'>You activate the gauntlets, preparing them to phase!</span>")
 		isPhased = TRUE
 		owner.visible_message("[owner.name] activates their Blueshift Gauntlets with a low hum.")
+		var/obj/item/clothing/gloves/color/latex/phantom_hand/A = new /obj/item/clothing/gloves/color/latex/phantom_hand(get_turf(src))
+		user.put_in_hands(A)
 	else
+		var/B
 		to_chat(owner, "<span class ='notice'>You deactivate the gauntlets, removing them from the bluespace fold!</span>")
 		isPhased = FALSE
 		owner.visible_message("[owner.name] deactivates their Blueshift Gauntlets with a soft beep.")
 		playsound(owner,'sound/machines/beep.ogg',1,TRUE)
+		user.get_active_held_item(B)
+		var/obj/item/clothing/gloves/color/latex/phantom_hand/A
+		if(B == A)
+			qdel(B)
 
 /datum/action/summon_implements //Create the button for summoning the holographic implements.
 	name = "Summon Implements - Summon a holographic cautery or set of drapes for starting operations"
 	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
 	button_icon_state = "neckchop" //placeholder
 
-/datum/action/summon_implements/Trigger(mob/living/user) //Summon the implements and create the radial menu for doing so.
-	/*if(owner.incapacitated())
+/datum/action/summon_implements/Trigger(mob/user) //Summon the implements and create the radial menu for doing so.
+	user = owner
+	if(owner.incapacitated())
 		to_chat(owner, "<span class='warning'>You can't use [name] while you're incapacitated!</span>")
 		return
 	if(isPhased == FALSE)
 		owner.visible_message("[owner.name] tries to summon a tool while the gauntlets are off with a dull beep.","<span class ='warning'>You can't use [name] while the gauntlets arent phased!</span>","You hear a beep nearby.")
 		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
-		return*/
-	/*if(!isImplementSpawned)
-		return*/
-	var/choice = input("Implements:", "Choose Implement") as null|anything in list("Holographic Drapes", "Holographic Cautery")
-	message_admins("bruh1")
-	/*if(!choice)
-		return*/
-	switch(choice)
-		if("Holographic Drapes")
-			var/obj/item/surgical_drapes/holographic/HD = new /obj/item/surgical_drapes/holographic(get_turf(user))
-			message_admins("bruh2")
-			user.put_in_hand(HD)
-			message_admins("bruh3")
-			isImplementSpawned = TRUE
-			isDrapeSpawned = TRUE
-		if("Holographic Cautery")
-			var/obj/item/cautery/augment/holographic/HC = new /obj/item/cautery/augment/holographic(get_turf(src))
-			user.put_in_active_hand(HC)
+		return
+	if(implements.len < max_implements)
+		var/choice = input("Implements:", "Choose Implement") as null|anything in list("Holographic Drapes", "Holographic Cautery")
+		switch(choice)
+			if("Holographic Drapes")
+				var/obj/item/surgical_drapes/holographic/HD = new /obj/item/surgical_drapes/holographic(get_turf(user))
+				user.put_in_active_hand(HD)
+				isDrapeSpawned = TRUE
+				isImplementSpawned = TRUE
+			if("Holographic Cautery")
+				var/obj/item/cautery/augment/holographic/HC = new /obj/item/cautery/augment/holographic(get_turf(src))
+				user.put_in_active_hand(HC)
+				isCauterySpawned = TRUE
+				isImplementSpawned = TRUE
+	if(implements.len > max_implements)
+		to_chat(user, "<span class ='notice'>You cant spawn anymore implements! Use your manipulators on yourself to despawn them.</span>")
 
 //BSG Item [XEON/FULP]
 /obj/item/clothing/gloves/color/latex/nitrile/blueshift/equipped(mob/user, slot)
