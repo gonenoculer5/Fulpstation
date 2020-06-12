@@ -23,7 +23,7 @@
 		return TRUE
 	return FALSE
 
-///Gnashing Teeth: Harm Harm, consistent 20 force punch on every second harm punch
+///Gnashing Teeth: Harm Harm, consistent 20 force punch on every second harm punch, has a chance to crit
 /datum/martial_art/the_sleeping_carp/proc/strongPunch(mob/living/carbon/human/A, mob/living/carbon/human/D)
 	///this var is so that the strong punch is always aiming for the body part the user is targeting and not trying to apply to the chest before deviating
 	var/obj/item/bodypart/affecting = D.get_bodypart(ran_zone(A.zone_selected))
@@ -121,14 +121,32 @@
 		return
 	ADD_TRAIT(H, TRAIT_NOGUNS, SLEEPING_CARP_TRAIT)
 	ADD_TRAIT(H, TRAIT_PIERCEIMMUNE, SLEEPING_CARP_TRAIT)
+	ADD_TRAIT(H, TRAIT_STUNRESISTANCE, SLEEPING_CARP_TRAIT) //READDED BY FULP, AS ARE BELOW RESISTANCES
 	ADD_TRAIT(H, TRAIT_NODISMEMBER, SLEEPING_CARP_TRAIT)
 	H.faction |= "carp" //:D
+
+	H.physiology.brute_mod *= 0.4 //brute is really not gonna cut it
+	H.physiology.burn_mod *= 0.7 //burn is distinctly more useful against them than brute but they're still resistant
+	H.physiology.stamina_mod *= 0.5 //stun batons prove to be one of the few ways to fight them. They have stun resistance already, so I think doubling down too hard on this resistance is a bit much.
+	H.physiology.stun_mod *= 0.3 //for those rare stuns
+	H.physiology.pressure_mod *= 0.3 //go hang out with carp
+	H.physiology.cold_mod *= 0.3 //cold mods are different to burn mods, they do stack however
+	H.physiology.heat_mod *= 2 //this is mostly so sleeping carp has a viable weakness. Cooking them alive. Setting them on fire and heating them will be their biggest weakness. The reason for this is....filet jokes.
 
 /datum/martial_art/the_sleeping_carp/on_remove(mob/living/carbon/human/H)
 	. = ..()
 	REMOVE_TRAIT(H, TRAIT_NOGUNS, SLEEPING_CARP_TRAIT)
 	REMOVE_TRAIT(H, TRAIT_PIERCEIMMUNE, SLEEPING_CARP_TRAIT)
+	REMOVE_TRAIT(H, TRAIT_STUNRESISTANCE, SLEEPING_CARP_TRAIT) //READDED BY FULP
 	REMOVE_TRAIT(H, TRAIT_NODISMEMBER, SLEEPING_CARP_TRAIT)
+
+	H.physiology.brute_mod = initial(H.physiology.brute_mod) //^
+	H.physiology.burn_mod = initial(H.physiology.burn_mod) //^
+	H.physiology.stamina_mod = initial(H.physiology.stamina_mod) //^
+	H.physiology.stun_mod = initial(H.physiology.stun_mod) //^
+	H.physiology.pressure_mod = initial(H.physiology.pressure_mod) //no more carpies //^
+	H.physiology.cold_mod = initial(H.physiology.cold_mod) //^
+	H.physiology.heat_mod = initial(H.physiology.heat_mod) //^
 
 	H.faction -= "carp" //:(
 
