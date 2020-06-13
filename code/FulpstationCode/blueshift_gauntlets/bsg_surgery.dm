@@ -15,13 +15,6 @@
 		isPhased = FALSE
 		qdel(src)
 
-/obj/item/clothing/gloves/color/latex/phantom_hand/attack_self(mob/user)
-	. = ..()
-	if(implements.len)
-		for(var/H in implements)
-			qdel(H)
-			to_chat(user, "<span class ='notice'>You clear all holographic implements.</span>")
-
 /obj/item/surgical_drapes/holographic
 	name = "holographic drapes"
 	desc = "Holographic surgery drapes created by the Blueshift Gauntlets for designating the phase area. Disappears when dropped."

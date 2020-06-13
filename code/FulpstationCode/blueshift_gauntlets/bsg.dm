@@ -1,17 +1,18 @@
 var/isPhased = FALSE
-var/isImplementSpawned = FALSE
 var/isDrapeSpawned = FALSE
 var/isCauterySpawned = FALSE
 var/bsgtrait = TRAIT_BLUESPACE_SHIFTING
-var/list/implements = list()
-var/max_implements = 2
+//var/isEmagged = FALSE
 
 //Action Buttons
 var/datum/action/set_phase/setphase = new /datum/action/set_phase()
-var/datum/action/summon_implements/summon_implements = new /datum/action/summon_implements()
+var/datum/action/summon_implements_drapes/summon_implements_drapes = new /datum/action/summon_implements_drapes()
+var/datum/action/summon_implements_cautery/summon_implements_cautery = new /datum/action/summon_implements_cautery()
+//var/datum/action/emag_effect_1 = new /datum/action/emag_effect_1()
 
 /datum/action/set_phase //Create the button for toggling the gloves phase.
-	name = "Change Phase - Enable or disable the gloves phasing device"
+	name = "Change Phase"
+	desc = "Enable or disable the gloves phasing device"
 	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
 	button_icon_state = "neckchop" //placeholder
 
@@ -26,23 +27,26 @@ var/datum/action/summon_implements/summon_implements = new /datum/action/summon_
 		owner.visible_message("[owner.name] activates their Blueshift Gauntlets with a low hum.")
 		var/obj/item/clothing/gloves/color/latex/phantom_hand/A = new /obj/item/clothing/gloves/color/latex/phantom_hand(get_turf(src))
 		user.put_in_hands(A)
+		playsound(owner,'sound/machines/synth_yes.ogg',1,TRUE)
 	else
 		var/B
 		to_chat(owner, "<span class ='notice'>You deactivate the gauntlets, removing them from the bluespace fold!</span>")
 		isPhased = FALSE
 		owner.visible_message("[owner.name] deactivates their Blueshift Gauntlets with a soft beep.")
+		playsound(owner, 'sound/machines/synth_no.ogg',1,TRUE)
 		playsound(owner,'sound/machines/beep.ogg',1,TRUE)
 		user.get_active_held_item(B)
 		var/obj/item/clothing/gloves/color/latex/phantom_hand/A
 		if(B == A)
 			qdel(B)
 
-/datum/action/summon_implements //Create the button for summoning the holographic implements.
-	name = "Summon Implements - Summon a holographic cautery or set of drapes for starting operations"
+/datum/action/summon_implements_drapes //Create the button for summoning the holo-drapes.
+	name = "Summon Implements"
+	desc = "Summon a holographic cautery starting operations"
 	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
 	button_icon_state = "neckchop" //placeholder
 
-/datum/action/summon_implements/Trigger(mob/user) //Summon the implements and create the radial menu for doing so.
+/datum/action/summon_implements_drapes/Trigger(mob/user) //Summon the implements and create the radial menu for doing so.
 	user = owner
 	if(owner.incapacitated())
 		to_chat(owner, "<span class='warning'>You can't use [name] while you're incapacitated!</span>")
@@ -51,22 +55,41 @@ var/datum/action/summon_implements/summon_implements = new /datum/action/summon_
 		owner.visible_message("[owner.name] tries to summon a tool while the gauntlets are off with a dull beep.","<span class ='warning'>You can't use [name] while the gauntlets arent phased!</span>","You hear a beep nearby.")
 		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
 		return
-	if(implements.len < max_implements)
-		var/choice = input("Implements:", "Choose Implement") as null|anything in list("Holographic Drapes", "Holographic Cautery")
-		switch(choice)
-			if("Holographic Drapes")
-				var/obj/item/surgical_drapes/holographic/HD = new /obj/item/surgical_drapes/holographic(get_turf(user))
-				user.put_in_active_hand(HD)
-				isDrapeSpawned = TRUE
-				isImplementSpawned = TRUE
-			if("Holographic Cautery")
-				var/obj/item/cautery/augment/holographic/HC = new /obj/item/cautery/augment/holographic(get_turf(src))
-				user.put_in_active_hand(HC)
-				isCauterySpawned = TRUE
-				isImplementSpawned = TRUE
-	if(implements.len > max_implements)
-		to_chat(user, "<span class ='notice'>You cant spawn anymore implements! Use your manipulators on yourself to despawn them.</span>")
-
+	if(isDrapeSpawned == FALSE)
+		var/obj/item/surgical_drapes/holographic/HD = new /obj/item/surgical_drapes/holographic(get_turf(user))
+		user.put_in_active_hand(HD)
+		isDrapeSpawned = TRUE
+	else
+		to_chat(owner, "<span class ='warning'>You cant spawn more drapes! Drop the current one to recall the hologram.")
+		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
+/datum/action/summon_implements_cautery //Create the button for summoning the holo-cautery.
+	name = "Summon Implements"
+	desc = "Summon a holographic cautery starting operations"
+	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
+	button_icon_state = "neckchop" //placeholder
+/datum/action/summon_implements_cautery/Trigger(mob/user)
+	user = owner
+	if(owner.incapacitated())
+		to_chat(owner, "<span class='warning'>You can't use [name] while you're incapacitated!</span>")
+		return
+	if(isPhased == FALSE)
+		owner.visible_message("[owner.name] tries to summon a tool while the gauntlets are off with a dull beep.","<span class ='warning'>You can't use [name] while the gauntlets arent phased!</span>","You hear a beep nearby.")
+		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
+		return
+	if(isCauterySpawned == FALSE)
+		var/obj/item/cautery/augment/holographic/HC = new /obj/item/cautery/augment/holographic(get_turf(src))
+		user.put_in_active_hand(HC)
+		isCauterySpawned = TRUE
+	else
+		to_chat(owner, "<span class ='warning'>You cant spawn more cauteries! Drop the current one to recall the hologram.")
+		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
+/*/datum/action/emag_effect_1
+	name = "Summon Implements - Summon a holographic cautery starting operations"
+	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
+	button_icon_state = "neckchop" //placeholder
+/datum/action/emag_effect_1/Trigger(mob/user)
+	user = owner
+*/
 //BSG Item [XEON/FULP]
 /obj/item/clothing/gloves/color/latex/nitrile/blueshift/equipped(mob/user, slot)
 	. = ..()
@@ -75,7 +98,8 @@ var/datum/action/summon_implements/summon_implements = new /datum/action/summon_
 	if(slot == ITEM_SLOT_GLOVES)
 		ADD_TRAIT(user, bsgtrait, CLOTHING_TRAIT)
 		setphase.Grant(user)
-		summon_implements.Grant(user)
+		summon_implements_drapes.Grant(user)
+		summon_implements_cautery.Grant(user)
 
 /obj/item/clothing/gloves/color/latex/nitrile/blueshift/dropped(mob/user)
 	. = ..()
@@ -89,7 +113,8 @@ var/datum/action/summon_implements/summon_implements = new /datum/action/summon_
 			playsound(user,'sound/machines/beep.ogg',1,TRUE)
 			REMOVE_TRAIT(user, bsgtrait, CLOTHING_TRAIT)
 			setphase.Remove(user)
-			summon_implements.Remove(user)
+			summon_implements_drapes.Remove(user)
+			summon_implements_cautery.Remove(user)
 
 /obj/item/clothing/gloves/color/latex/nitrile/blueshift
 	name = "Blueshift Gauntlets"
@@ -105,6 +130,12 @@ var/datum/action/summon_implements/summon_implements = new /datum/action/summon_
 	max_heat_protection_temperature = GLOVES_MAX_TEMP_PROTECT
 	resistance_flags = NONE
 
+/*/obj/item/clothing/gloves/color/latex/nitrile/blueshift/emag_act(mob/user)
+	. = ..()
+	isEmagged = TRUE
+	to_chat(user, "<span class ='warning'>You emag the interface of the [src]!")
+	emag_effect_1.Grant(user) //Cat got your tongue effect.
+*/
 //TECHWEB HANDLING
 /datum/design/bs_gauntlet
 	name = "Blueshift Gauntlets"
