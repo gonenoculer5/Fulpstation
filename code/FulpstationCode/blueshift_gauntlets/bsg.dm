@@ -1,6 +1,7 @@
 var/isPhased = FALSE
 var/isDrapeSpawned = FALSE
 var/isCauterySpawned = FALSE
+var/isManipulatorSpawned = FALSE
 var/bsgtrait = TRAIT_BLUESPACE_SHIFTING
 //var/isEmagged = FALSE
 
@@ -11,40 +12,40 @@ var/datum/action/summon_implements_cautery/summon_implements_cautery = new /datu
 //var/datum/action/emag_effect_1 = new /datum/action/emag_effect_1()
 
 /datum/action/set_phase //Create the button for toggling the gloves phase.
-	name = "Change Phase"
-	desc = "Enable or disable the gloves phasing device"
+	name = "Create Bluespace Fold"
+	desc = "Prepare the gauntlets and enter or leave a created bluespace fold."
 	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
 	button_icon_state = "neckchop" //placeholder
 
 /datum/action/set_phase/Trigger(mob/user) //Toggle the gloves phase between on or off.
 	user = owner
+	var/sound_freq = rand(5120, 8800)
 	if(owner.incapacitated())
 		to_chat(owner, "<span class='warning'>You can't use [name] while you're incapacitated!</span>")
 		return
 	if(isPhased == FALSE)
-		to_chat(owner, "<span class ='notice'>You activate the gauntlets, preparing them to phase!</span>")
+		to_chat(owner, "<span class ='notice'>You activate the gauntlets, placing them out of phase!</span>")
 		isPhased = TRUE
-		owner.visible_message("[owner.name] activates their Blueshift Gauntlets with a low hum.")
+		owner.visible_message("[owner.name] activates their Blueshift Gauntlets with a low hum, placing their hands within the bluespace fold.")
 		var/obj/item/clothing/gloves/color/latex/phantom_hand/A = new /obj/item/clothing/gloves/color/latex/phantom_hand(get_turf(src))
 		user.put_in_hands(A)
-		playsound(owner,'sound/machines/synth_yes.ogg',1,TRUE)
+		isManipulatorSpawned = TRUE
+		playsound(owner,'sound/machines/synth_yes.ogg',50,TRUE, frequency = sound_freq)
+	if(isManipulatorSpawned == TRUE)
+		to_chat(owner, "<span class = 'warning'> You cant deactivate the gauntlets with your hands within the fold!")
 	else
-		var/B
 		to_chat(owner, "<span class ='notice'>You deactivate the gauntlets, removing them from the bluespace fold!</span>")
 		isPhased = FALSE
 		owner.visible_message("[owner.name] deactivates their Blueshift Gauntlets with a soft beep.")
-		playsound(owner, 'sound/machines/synth_no.ogg',1,TRUE)
-		playsound(owner,'sound/machines/beep.ogg',1,TRUE)
-		user.get_active_held_item(B)
-		var/obj/item/clothing/gloves/color/latex/phantom_hand/A
-		if(B == A)
-			qdel(B)
+		playsound(owner, 'sound/machines/synth_no.ogg',50,TRUE, frequency = sound_freq)
+		playsound(owner,'sound/machines/beep.ogg',10,TRUE)
+
 
 /datum/action/summon_implements_drapes //Create the button for summoning the holo-drapes.
 	name = "Summon Implements"
-	desc = "Summon a holographic cautery starting operations"
-	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
-	button_icon_state = "neckchop" //placeholder
+	desc = "Summon a set of holographic drapes for starting operations. Limit one per user."
+	icon_icon = 'icons/obj/surgery.dmi' //placeholder
+	button_icon_state = "surgical_drapes" //placeholder
 
 /datum/action/summon_implements_drapes/Trigger(mob/user) //Summon the implements and create the radial menu for doing so.
 	user = owner
@@ -64,9 +65,9 @@ var/datum/action/summon_implements_cautery/summon_implements_cautery = new /datu
 		playsound(owner,'sound/machines/buzz-two.ogg',1,TRUE)
 /datum/action/summon_implements_cautery //Create the button for summoning the holo-cautery.
 	name = "Summon Implements"
-	desc = "Summon a holographic cautery starting operations"
-	icon_icon = 'icons/mob/actions/actions_items.dmi' //placeholder
-	button_icon_state = "neckchop" //placeholder
+	desc = "Summon a holographic cautery for stopping operations. Limit 1 per user."
+	icon_icon = 'icons/obj/surgery.dmi' //placeholder
+	button_icon_state = "cautery" //placeholder
 /datum/action/summon_implements_cautery/Trigger(mob/user)
 	user = owner
 	if(owner.incapacitated())
@@ -129,7 +130,12 @@ var/datum/action/summon_implements_cautery/summon_implements_cautery = new /datu
 	heat_protection = HANDS
 	max_heat_protection_temperature = GLOVES_MAX_TEMP_PROTECT
 	resistance_flags = NONE
-
+/obj/item/clothing/gloves/color/latex/nitrile/blueshift/suicide_act(mob/user)
+	user.visible_message("<span class='suicide'>[user] grabs themselves and begins to vibrate violently out of phase with reality!</span>")
+	var/mob/living/carbon/human/H = user
+	addtimer(CALLBACK(user, /mob/living/carbon.proc/gib, null, null, TRUE, TRUE), 25)
+	H.gib()
+	return(MANUAL_SUICIDE)
 /*/obj/item/clothing/gloves/color/latex/nitrile/blueshift/emag_act(mob/user)
 	. = ..()
 	isEmagged = TRUE

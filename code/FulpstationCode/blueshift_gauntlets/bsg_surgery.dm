@@ -13,7 +13,15 @@
 	. = ..()
 	if(isPhased == TRUE)
 		isPhased = FALSE
+		isManipulatorSpawned = FALSE
 		qdel(src)
+/obj/item/clothing/gloves/color/latex/phantom_hand/suicide_act(mob/user)
+	user.visible_message("<span class='suicide'>[user] reaches within themselves, trying to find hope!</span>")
+	var/mob/living/carbon/human/H = user
+	addtimer(CALLBACK(user, /mob/living/carbon.proc/gib, null, null, TRUE, TRUE), 25)
+	user.visible_message("<span class='suicide'>[user] didnt find any hope! How dissapointing.")
+	H.gib()
+	return(MANUAL_SUICIDE)
 
 /obj/item/surgical_drapes/holographic
 	name = "holographic drapes"
