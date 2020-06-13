@@ -39,11 +39,8 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 	// asset_cache
 	var/asset_cache_job
 	if(href_list["asset_cache_confirm_arrival"])
-		asset_cache_job = round(text2num(href_list["asset_cache_confirm_arrival"]))
-		//because we skip the limiter, we have to make sure this is a valid arrival and not somebody tricking us
-		//	into letting append to a list without limit.
-		if (asset_cache_job > 0 && asset_cache_job <= last_asset_job && !(asset_cache_job in completed_asset_jobs))
-			completed_asset_jobs += asset_cache_job
+		asset_cache_job = asset_cache_confirm_arrival(href_list["asset_cache_confirm_arrival"])
+		if (!asset_cache_job)
 			return
 
 	var/mtl = CONFIG_GET(number/minute_topic_limit)
@@ -86,6 +83,10 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 	if (asset_cache_job && (asset_cache_job in completed_asset_jobs))
 		to_chat(src, "<span class='danger'>An error has been detected in how your client is receiving resources. Attempting to correct.... (If you keep seeing these messages you might want to close byond and reconnect)</span>")
 		src << browse("...", "window=asset_cache_browser")
+		return
+	if (href_list["asset_cache_preload_data"])
+		asset_cache_preload_data(href_list["asset_cache_preload_data"])
+		return
 
 	// Keypress passthrough
 	if(href_list["__keydown"])
@@ -450,6 +451,10 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		if (menuitem)
 			menuitem.Load_checked(src)
 
+	view_size = new(src, getScreenSize(prefs.widescreenpref))
+	view_size.resetFormat()
+	view_size.setZoomMode()
+	fit_viewport()
 	Master.UpdateTickRate()
 
 //////////////
@@ -466,6 +471,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	GLOB.directory -= ckey
 	log_access("Logout: [key_name(src)]")
 	GLOB.ahelp_tickets.ClientLogout(src)
+	SSserver_maint.UpdateHubStatus()
 	if(credits)
 		QDEL_LIST(credits)
 	if(holder)
@@ -488,11 +494,12 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 				"Forever alone :("\
 			)
 
-			send2tgs("Server", "[cheesy_message] (No admins online)")
+			send2adminchat("Server", "[cheesy_message] (No admins online)")
 	QDEL_LIST_ASSOC_VAL(char_render_holders)
 	if(movingmob != null)
 		movingmob.client_mobs_in_contents -= mob
 		UNSETEMPTY(movingmob.client_mobs_in_contents)
+	seen_messages = null
 	Master.UpdateTickRate()
 	. = ..() //Even though we're going to be hard deleted there are still some things that want to know the destroy is happening
 	return QDEL_HINT_HARDDEL_NOW
@@ -596,6 +603,9 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	var/datum/DBQuery/query_log_connection = SSdbcore.NewQuery("INSERT INTO `[format_table_name("connection_log")]` (`id`,`datetime`,`server_ip`,`server_port`,`round_id`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),INET_ATON(IF('[world.internet_address]' LIKE '', '0', '[world.internet_address]')),'[world.port]','[GLOB.round_id]','[sql_ckey]',INET_ATON('[sql_ip]'),'[sql_computerid]')")
 	query_log_connection.Execute()
 	qdel(query_log_connection)
+
+	SSserver_maint.UpdateHubStatus()
+
 	if(new_player)
 		player_age = -1
 	. = player_age
@@ -850,8 +860,13 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		'html/browser/playeroptions.css',
 		)
 	spawn (10) //removing this spawn causes all clients to not get verbs.
+
+		//load info on what assets the client has
+		src << browse('code/modules/asset_cache/validate_assets.html', "window=asset_cache_browser")
+
 		//Precache the client with all other assets slowly, so as to not block other browse() calls
-		getFilesSlow(src, SSassets.preload, register_asset = FALSE)
+		addtimer(CALLBACK(GLOBAL_PROC, /proc/getFilesSlow, src, SSassets.preload, FALSE), 5 SECONDS)
+
 		#if (PRELOAD_RSC == 0)
 		for (var/name in GLOB.vox_sounds)
 			var/file = GLOB.vox_sounds[name]
@@ -874,17 +889,12 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		if ("key")
 			return FALSE
 		if("view")
-			change_view(var_value)
+			view_size.setDefault(var_value)
 			return TRUE
 	. = ..()
 
 /client/proc/rescale_view(change, min, max)
-	var/viewscale = getviewsize(view)
-	var/x = viewscale[1]
-	var/y = viewscale[2]
-	x = clamp(x+change, min, max)
-	y = clamp(y+change, min,max)
-	change_view("[x]x[y]")
+	view_size.setTo(clamp(change, min, max), clamp(change, min, max))
 
 /client/proc/update_movement_keys(datum/preferences/direct_prefs)
 	var/datum/preferences/D = prefs || direct_prefs
@@ -906,9 +916,6 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 /client/proc/change_view(new_size)
 	if (isnull(new_size))
 		CRASH("change_view called without argument.")
-
-	if(prefs && !prefs.widescreenpref && new_size == CONFIG_GET(string/default_view))
-		new_size = CONFIG_GET(string/default_view_square)
 
 	view = new_size
 	apply_clickcatcher()
@@ -953,6 +960,21 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		qdel(S)
 	char_render_holders = null
 
+///Redirect proc that makes it easier to call the unlock achievement proc. Achievement type is the typepath to the award, user is the mob getting the award, and value is an optional variable used for leaderboard value increments
+/client/proc/give_award(achievement_type, mob/user, value = 1)
+	return	player_details.achievements.unlock(achievement_type, user, value)
 
-/client/proc/give_award(achievement_type, mob/user)
-	return	player_details.achievements.unlock(achievement_type, user)
+///Redirect proc that makes it easier to get the status of an achievement. Achievement type is the typepath to the award.
+/client/proc/get_award_status(achievement_type, mob/user, value = 1)
+	return	player_details.achievements.get_achievement_status(achievement_type)
+
+///Redirect proc that makes it easier to get the status of an achievement. Achievement type is the typepath to the award.
+/client/proc/award_heart(heart_reason)
+	to_chat(src, "<span class='nicegreen'>Someone awarded you a heart![heart_reason ? " They said: [heart_reason]!" : ""]</span>")
+	if(!src)
+		return
+	prefs.hearted_until = world.realtime + (24 HOURS)
+	prefs.hearted = TRUE
+	if(!src)
+		return
+	prefs.save_preferences()

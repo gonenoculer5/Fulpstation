@@ -24,29 +24,34 @@
 
 
 
-// Return list of valid, non-dense turfs in range
-//
 /proc/return_valid_floor_in_range(atom/A, checkRange = 8, minRange = 0, checkFloor = TRUE)
-	var/list/turf/possible_turfs = list()
-	for(var/turf/T in range(A, checkRange))
-		// Checking for Floor...
-		if (checkFloor && !istype(T, /turf/open/floor))
-			continue
-		// Checking for Density...
-		if(T.density)
-			continue
-		// Checking Min Distance...
-		if (minRange > 0 && (locate(T) in range(A, minRange)))
-			continue
-		// Checking for Objects...
-		var/clear = TRUE
-		for(var/obj/O in T)
-			if(O.density)
-				clear = FALSE
-				break
-		if(clear)
-			possible_turfs += T
-	return possible_turfs
+	// FAIL: Atom doesn't exist. Aren't you real?
+	if (!istype(A))
+		return null
+
+	var/deltaX = rand(minRange,checkRange)*pick(-1,1)
+	var/deltaY = rand(minRange,checkRange)*pick(-1,1)
+	var/turf/center = get_turf(A)
+	
+	var/target = locate((center.x + deltaX),(center.y + deltaY),center.z)
+
+	if (check_turf_is_valid(target, checkFloor))
+		return target
+	return null
+
+
+/proc/check_turf_is_valid(turf/T, checkFloor = TRUE)
+	// Checking for Floor...
+	if (checkFloor && !istype(T, /turf/open/floor))
+		return FALSE
+	// Checking for Density...
+	if(T.density)
+		return FALSE
+	// Checking for Objects...
+	for(var/obj/O in T)
+		if(O.density)
+			return FALSE
+	return TRUE
 
 
 // Return a xeno_spawn location in an area - use for additional jobspawns

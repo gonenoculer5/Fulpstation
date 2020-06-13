@@ -29,11 +29,22 @@
 /datum/game_mode/traitor
 	restricted_jobs = list("Cyborg", "Deputy")
 
+	//The time for Cobby is Over//	-Love, Sal
 
+/*/datum/reagent/medicine/C2/multiver = /datum/reagent/medicine/CF/charcoal
+
+/datum/chemical_reaction/multiver
+	results = list(/datum/reagent/medicine/CF/charcoal = 2)
+
+/datum/chemical_reaction/ichiyuri
+	results = list(/datum/reagent/medicine/CF/silver_sulfadiazine = 5)
+
+/datum/chemical_reaction/libital
+	results = list(/datum/reagent/medicine/CF/styptic = 3)*/
 
 
 /obj/item/clothing/accessory
-	mob_overlay_icon = 'icons/mob/clothing/accessories.dmi'
+	worn_icon = 'icons/mob/clothing/accessories.dmi'
 
 /obj/item/clothing/suit/space/hardsuit
 	var/toggle_helmet_sound = 'sound/mecha/mechmove03.ogg'
@@ -47,6 +58,11 @@
 
 /mob/living/simple_animal/bot/secbot
 	var/list/arrest_cooldown = list() //If you're in the list, we don't log the arrest
+	var/weapons_violation //Violation data for records/reporting
+	var/id_violation
+	var/record_violation
+	var/harm_violation
+
 
 //*************************************************************************
 //** FULPSTATION IMPROVED RECORD SECURITY PR -Surrealistik Oct 2019 ENDS
@@ -171,45 +187,22 @@
 //***********************************************************************
 
 //***************************************************************************
-//** FULPSTATION HOLOBEDS by Surrealistik Nov 2019 BEGINS
+//** FULPSTATION MEDBORG CHANGES by Surrealistik Nov 2019-Feb 2020 BEGINS
 //---------------------------------------------------------------------------
 //** Adds no-collision holobeds to the medborg. Support for handheld versions
 //***************************************************************************
 
-/obj/item/robot_module/medical
-	basic_modules = list(
-		/obj/item/assembly/flash/cyborg,
-		/obj/item/healthanalyzer,
-		/obj/item/reagent_containers/borghypo,
-		/obj/item/borg/apparatus/beaker,
-		/obj/item/reagent_containers/dropper,
-		/obj/item/reagent_containers/syringe,
-		/obj/item/surgical_drapes,
-		/obj/item/retractor,
-		/obj/item/hemostat,
-		/obj/item/cautery,
-		/obj/item/surgicaldrill,
-		/obj/item/scalpel,
-		/obj/item/circular_saw,
-		/obj/item/extinguisher/mini,
-		/obj/item/holobed_projector/robot,
-		/obj/item/borg/cyborghug/medical,
-		/obj/item/stack/medical/gauze/cyborg,
-		/obj/item/organ_storage,
-		/obj/item/borg/lollipop)
+/obj/item/borg/upgrade/beaker_app
+	name = "secondary medicine storage apparatus"
+	desc = "A supplementary medicine storage apparatus for medical cyborgs."
+
 
 //***************************************************************************
-//** FULPSTATION HOLOBEDS by Surrealistik Nov 2019 ENDS
+//** FULPSTATION MEDBORG CHANGES by Surrealistik Nov 2019-Feb 2020 ENDS
 //---------------------------------------------------------------------------
 //** Adds no-collision holobeds to the medborg. Support for handheld versions
 //***************************************************************************
 
-
-//***************************************************************************
-//** FULPSTATION SECBORG MODULE UPDATE by Surrealistik Jan 2020 BEGINS
-//---------------------------------------------------------------------------
-//** Expands the Secborg's module items and upgrades.
-//***************************************************************************
 
 //************************************************************************
 //** Airlock Electroadaptive Psuedo Circuit BEGINS - Surrealistik Oct 2019
@@ -241,7 +234,7 @@
 		/obj/item/clothing/mask/gas/sechailer/cyborg,
 		/obj/item/crowbar/cyborg,
 		/obj/item/extinguisher/mini,
-		/obj/item/handheld_sec_record_uplink/cyborg
+		/obj/item/handheld_sec_record_uplink/cyborg,
 		)
 	emag_modules = list() //Instead we unlock lethals for the integrated e_gun
 
@@ -249,8 +242,6 @@
 /obj/item/borg/upgrade/pinpointer //Sec borg can now install the crew monitor/pinpointer module.
 	module_type = list(/obj/item/robot_module/medical, /obj/item/robot_module/syndicate_medical, /obj/item/robot_module/security)
 
-/datum/techweb_node/cyborg_upg_combat
-	design_ids = list("borg_upgrade_e_gun_cooler", "borg_upgrade_e_gun_kill")
 
 //***************************************************************************
 //** FULPSTATION SECBORG MODULE UPDATE by Surrealistik Jan 2020 BEGINS
@@ -309,3 +300,129 @@
 //*****************************************************************************
 //** Engineer Borg Manipulator Improvement by Surrealistik Oct 2019 ENDS
 //*****************************************************************************
+
+//***************************************************************************
+//** FULPSTATION SITH STARTER KIT by Surrealistik Jan 2020 BEGINS
+//---------------------------------------------------------------------------
+//** Adds Sith Starter Kit traitor bundle for the Chaplain
+//***************************************************************************
+
+/obj/item/melee/transforming/energy/sword
+	var/datum/effect_system/spark_spread/spark_system
+
+//***************************************************************************
+//** FULPSTATION SITH STARTER KIT by Surrealistik Jan 2020 ENDS
+//---------------------------------------------------------------------------
+//** Adds Sith Starter Kit traitor bundle for the Chaplain
+//***************************************************************************
+
+
+
+//***************************************************************************
+//** FULPSTATION EMAG NERFS by Surrealistik Feb 2020 BEGINS
+//---------------------------------------------------------------------------
+//** Makes the emag much more expensive and introduces a 6 TC budget emag
+//***************************************************************************
+
+/datum/uplink_item/device_tools/emag
+	cost = 15
+
+//***************************************************************************
+//** FULPSTATION EMAG NERFS by Surrealistik Feb 2020 ENDS
+//---------------------------------------------------------------------------
+//** Makes the emag much more expensive and introduces a 6 TC budget emag
+//***************************************************************************
+
+
+//***************************************************************************
+//** FULPSTATION SYNDIBORG DISGUISE MENU by Surrealistik March 2020 BEGINS
+//---------------------------------------------------------------------------
+//** Lets medical and engineering syndiborgs choose a disguise from a list.
+//** Also tweaks the medical syndiborg, removing emag and granting more med items
+//***************************************************************************
+/obj/item/borg_chameleon //List of available disguises
+	var/disguise_text //for feedback
+	var/default_name //Where we store our initial name.
+	var/buffer_name //for RA2 spy style scan of other borgs.
+	var/buffer_disguise //for RA2 spy style scan of other borgs.
+	var/buffer_disguise_text //for RA2 spy style scan of other borgs.
+	actions_types = list(/datum/action/item_action/borg_chameleon)
+
+
+/obj/item/reagent_containers/borghypo/syndicate
+	desc = "An experimental piece of Syndicate technology used to produce powerful restorative nanites used to very quickly restore injuries of all types. Also synthesizes potassium iodide for radiation poisoning and lipolicide and anacea for stealthy kills and heparin for more overt ones."
+
+
+//***************************************************************************
+//** FULPSTATION SYNDIBORG DISGUISE MENU by Surrealistik March 2020 ENDS
+//---------------------------------------------------------------------------
+//** Lets medical and engineering syndiborgs choose a disguise from a list.
+//** Also tweaks the medical syndiborg, removing emag and granting more med items
+//***************************************************************************
+
+
+
+//************************************************************
+//** Improved Sec Starter Gear by Surrealistik Oct 2019 BEGINS
+//************************************************************
+/datum/outfit/job/security
+	backpack_contents = list() //Start with stun baton in belt.
+	r_pocket = /obj/item/pda/security
+	belt = /obj/item/storage/belt/security/fulp_starter_full
+	glasses = /obj/item/clothing/glasses/hud/security/sunglasses
+	box = /obj/item/storage/box/survival/security/improved
+	pda_slot = ITEM_SLOT_RPOCKET
+
+/datum/outfit/job/warden
+	backpack_contents = list() //Start with stun baton in belt.
+	r_pocket = /obj/item/pda/security
+	belt = /obj/item/storage/belt/security/fulp_starter_full
+	box = /obj/item/storage/box/survival/security/improved
+	pda_slot = ITEM_SLOT_RPOCKET
+
+/datum/outfit/job/hos
+	backpack_contents = list() //Start with stun baton in belt.
+	r_pocket = /obj/item/pda/security
+	belt = /obj/item/storage/belt/security/fulp_starter_full
+	box = /obj/item/storage/box/survival/security/improved
+	pda_slot = ITEM_SLOT_RPOCKET
+
+/obj/machinery/vending/wardrobe/sec_wardrobe
+	req_access = list(ACCESS_SECURITY) //We can now vend armor and helmets, so we need to protect the contents.
+
+//************************************************************
+//** Improved Sec Starter Gear by Surrealistik Oct 2019 ENDS
+//************************************************************
+
+//***********************************************************
+//**** Detective Expanded Kit BEGINS - Surrealistik, Oct 2019
+//***********************************************************
+
+/datum/outfit/job/detective
+	glasses = /obj/item/clothing/glasses/detective
+
+/obj/item/cartridge/detective
+	access = CART_SECURITY | CART_MEDICAL | CART_MANIFEST | CART_REAGENT_SCANNER | CART_ATMOS
+
+/datum/techweb_node/integrated_HUDs
+	design_ids = list("health_hud", "security_hud", "diagnostic_hud", "scigoggles", "detective_glasses")
+
+/datum/design/detective_scanner
+	desc = "Used to remotely scan objects and biomass for DNA and fingerprints, and has an integrated health and reagent analyzer. Can print a report of its findings."
+
+/obj/item/detective_scanner
+	desc = "Used to remotely scan objects and biomass for DNA and fingerprints, and has an integrated health and reagent analyzer. Can print a report of its findings."
+
+/obj/item/detective_scanner
+	icon = 'icons/Fulpicons/Surreal_stuff/detective_obs.dmi'
+	icon_state = "forensicnew-0"
+	req_one_access = list(ACCESS_SECURITY, ACCESS_FORENSICS_LOCKERS) //Checked when trying to purge laws or use data disks with the scanner.
+	var/mode
+	var/advanced = TRUE
+	var/print_time_stamp
+	var/print_cooldown = 30 //3 second cooldown between prints.
+
+
+//***********************************************************
+//**** Detective Expanded Kit ENDS - Surrealistik, Oct 2019
+//***********************************************************
